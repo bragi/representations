@@ -1,0 +1,7 @@
+<p>New user</p>
+
+<% r(@user).form do |user| %>
+  <% raise "Got here" %>
+  <%= user.login.label %>
+  <%= user.login.text_field %>
+<% end%>

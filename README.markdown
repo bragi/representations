@@ -12,7 +12,7 @@ Rails helpers:
 
     - form_for(user) do |f|
       login:
-      = h(f.user.login)
+      = h(user.login)
       = f.label(:email, "Email")
       = f.text_field(:email)
       - fields_for(user.profile) do |p|
@@ -26,6 +26,7 @@ Rails helpers:
 
 Resource Representations
 
+    - user = r(user)
     - user.form do
       login:
       = user.login

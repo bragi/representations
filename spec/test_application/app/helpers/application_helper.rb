@@ -1,7 +1,7 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
   def r(model)
-    r = ResourceRepresentations.representation_for(model)
+    r = ResourceRepresentations.representation_for(model, self)
     yield r if block_given?
     r
   end

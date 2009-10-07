@@ -1,35 +1,42 @@
 module ResourceRepresentations
-  def representation_for(object, name=nil)
+  def representation_for(object, template, name=nil)
+  
     representation_class = if object.is_a?(ActiveRecord::Base)
       ActiveRecordRepresentation
     else
       "#{object.class}Representation".constantize rescue DefaultRepresentation
     end
-    representation_class.new(object, name)
+    representation_class.new(object, template, name)
   end
 
   module_function :representation_for
   
   class Representation
-    include ERB::Util
-    include ActionView::Helpers
+    #include ERB::Util
+    #include ActionView::Helpers
     
     attr_accessor :value
     attr_accessor :name
+    attr_accessor :output_buffer
+    attr_accessor :template
     
-    def initialize(value, name=nil)
+    def initialize(value, template, name=nil)
       self.value = value
       self.name = name
+      self.template = template
     end
-
+    
     def to_s
-      h(value.to_s)
+      delegate(:h, value.to_s)
+    end
+    def delegate_method(name, *args)
+      template.send(name, *args)
     end
   end
   
   class DefaultRepresentation < Representation
     def label
-      %Q{<label for="#{name}">#{h(name.humanize)}</label>}
+      %Q{<label for="#{name}">#{delegate_method(:h, name.humanize)}</label>}
     end
     
     def text_field
@@ -40,20 +47,30 @@ module ResourceRepresentations
   class ActiveRecordRepresentation < Representation
     def form(&block)
       raise "You need to provide block to form representation" unless block_given?
-      content = capture(&block)
-      concat(form_tag_html(value))
-      concat(content)
-      concat("</form>")
+      content = template.capture(self, &block)
+      template.concat(delegate_method(:form_tag, value))
+      template.concat(content)
+      template.concat("</form>")
       self
     end
 
-    def method_missing(name)
+    def method_missing(name, *args)
+      #debugger
+      Rails.logger.debug name.to_s[-1]
+      
+      Rails.logger.debug name
       method = <<-EOF
         def #{name}
-          @#{name} ||= ResourceRepresentations.representation_for(value.#{name}, "#{name}")
+          @#{name} ||= ResourceRepresentations.representation_for(value.#{name}, template, "#{name}")
         end
       EOF
+      Rails.logger.debug "Name: #{name}" 
+      Rails.logger.debug "Args: #{args}"
+      Rails.logger.debug "method_start"
+      Rails.logger.debug method
+      Rails.logger.debug "method_end"
       self.class.class_eval(method, __FILE__, __LINE__)
+
       self.send(name)
     end
   end

@@ -1,5 +1,5 @@
 module ResourceRepresentations
-  def representation_for(object, template, name=nil)
+  def representation_for(object, template, name=nil, parent=nil)
   
     representation_class = if object.is_a?(ActiveRecord::Base)
       ActiveRecordRepresentation
@@ -17,15 +17,17 @@ module ResourceRepresentations
     attr_accessor :name
     attr_accessor :output_buffer
     attr_accessor :template
+    attr_accessor :parent
     
-    def initialize(value, template, name=nil)
+    def initialize(value, template, name=nil, parent=nil)
       self.value = value
       self.name = name
       self.template = template
+      self.parent = parent
     end
     
     def to_s
-      delegate(:h, value.to_s)
+      delegate_method(:h, value.to_s)
     end
     def delegate_method(name, *args)
       template.send(name, *args)
@@ -38,7 +40,25 @@ module ResourceRepresentations
     end
     
     def text_field
-      %Q{<input type="text" name="#{name}" value="#{value}" id="#{name}"/>}
+      Rails.logger.debug "Name: #{name}"
+      Rails.logger.debug "Parent.name: #{parent.name}" unless parent.nil?
+      root_name = ''
+      children = Array.new
+      if parent.nil?
+        root_name += name
+      else
+        _parent = parent
+        begin
+          children.push(name)
+          root_name = _parent.name
+          _parent = parent.parent
+        end while _parent != nil #iterate children to find the top parent
+      end
+      name_attr_value = root_name
+      children.each do |x| 
+        name_attr_value += "[" + x + "]" 
+      end
+      %Q{<input type="text" name="#{name_attr_value}" value="#{value}" id="#{name}"/>}
     end
   end
 
@@ -55,12 +75,12 @@ module ResourceRepresentations
     def method_missing(name, *args)
       method = <<-EOF
         def #{name}
-          @#{name} ||= ResourceRepresentations.representation_for(value.#{name}, template, "#{name}")
+          @#{name} ||= ResourceRepresentations.representation_for(value.#{name}, template, "#{name}", self)
         end
       EOF
-      self.class.class_eval(method, __FILE__, __LINE__)
+        self.class.class_eval(method, __FILE__, __LINE__)
 
-      self.send(name)
+        self.send(name)
     end
   end
 end

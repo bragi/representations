@@ -6,14 +6,12 @@ module ResourceRepresentations
     else
       "#{object.class}Representation".constantize rescue DefaultRepresentation
     end
-    representation_class.new(object, template, name)
+    representation_class.new(object, template, name, parent)
   end
 
   module_function :representation_for
   
   class Representation
-    #include ERB::Util
-    #include ActionView::Helpers
     
     attr_accessor :value
     attr_accessor :name
@@ -55,20 +53,11 @@ module ResourceRepresentations
     end
 
     def method_missing(name, *args)
-      #debugger
-      Rails.logger.debug name.to_s[-1]
-      
-      Rails.logger.debug name
       method = <<-EOF
         def #{name}
           @#{name} ||= ResourceRepresentations.representation_for(value.#{name}, template, "#{name}")
         end
       EOF
-      Rails.logger.debug "Name: #{name}" 
-      Rails.logger.debug "Args: #{args}"
-      Rails.logger.debug "method_start"
-      Rails.logger.debug method
-      Rails.logger.debug "method_end"
       self.class.class_eval(method, __FILE__, __LINE__)
 
       self.send(name)

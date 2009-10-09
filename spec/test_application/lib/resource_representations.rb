@@ -1,4 +1,5 @@
 module ResourceRepresentations
+  VAR_REPRESENTATION_SUFFIX = '_representation'
   def representation_for(object, template, name=nil, parent=nil)
     representation_class = if object.is_a?(ActiveRecord::Base)
       ActiveRecordRepresentation
@@ -84,9 +85,10 @@ module ResourceRepresentations
     def method_missing(method_name, *args, &block)
       method = <<-EOF
         def #{method_name}(*args, &block)
-          @#{method_name} ||= ResourceRepresentations.representation_for(@value.#{method_name}, @template, "#{method_name}", self)
-          @#{method_name}.with_block(&block)
-          @#{method_name}
+          debugger
+          @#{method_name}_VAR_REPRESENTATION_SUFFIX ||= ResourceRepresentations.representation_for(@value.#{method_name}, @template, "#{method_name}", self)
+          @#{method_name}_VAR_REPRESENTATION_SUFFIX.with_block(&block)
+          @#{method_name}_VAR_REPRESENTATION_SUFFIX
         end
       EOF
           self.class.class_eval(method, __FILE__, __LINE__)

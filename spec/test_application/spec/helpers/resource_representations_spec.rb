@@ -18,7 +18,7 @@ describe ResourceRepresentations do
     user = ResourceRepresentations::representation_for(user, nil)
     user.nick.should be_a_kind_of(ResourceRepresentations::DefaultRepresentation)
   end
-  it "should be create proper chain of Representations" do
+  it "should create proper chain of Representations" do
     profile = stub_model(Profile, {:name => "some name", :surname => nil})
     user = stub_model(User, {:login => nil, :profile => profile})
     user = ResourceRepresentations::representation_for(user, nil)

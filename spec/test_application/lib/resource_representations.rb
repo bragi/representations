@@ -25,10 +25,10 @@ module ResourceRepresentations
     end
     
     def to_s
-      ERB::Util::h(value.to_s)
+      ERB::Util::h(@value.to_s)
     end
-    def delegate_method(name, *args)
-      template.send(name, *args)
+    def delegate_method(method_name, *args)
+      template.send(method_name, *args)
     end
     def with_block(&block)
       yield self if block_given?
@@ -63,7 +63,7 @@ module ResourceRepresentations
     end
   end
   class NilClassRepresentation < Representation
-    def method_missing(name, *args)
+    def method_missing(method_name, *args)
       return self
     end
     def with_block(&block)
@@ -85,15 +85,14 @@ module ResourceRepresentations
     def method_missing(method_name, *args, &block)
       method = <<-EOF
         def #{method_name}(*args, &block)
-          debugger
           @#{method_name}_VAR_REPRESENTATION_SUFFIX ||= ResourceRepresentations.representation_for(@value.#{method_name}, @template, "#{method_name}", self)
           @#{method_name}_VAR_REPRESENTATION_SUFFIX.with_block(&block)
           @#{method_name}_VAR_REPRESENTATION_SUFFIX
         end
       EOF
-          self.class.class_eval(method, __FILE__, __LINE__)
+      self.class.class_eval(method, __FILE__, __LINE__)
 
-          self.send(method_name, &block)
+      self.send(method_name, &block)
     end
   end
 end

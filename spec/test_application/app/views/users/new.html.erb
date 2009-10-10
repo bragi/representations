@@ -1,6 +1,9 @@
 <p>New user</p>
-<% r(@user).form do |user| %>
-  <%#<%= user.login.label %>%>
-  <%#<%= user.login.text_field %>%>
-  <%= user.profile.name%>
+<% user = User.new %>
+<% user.nick = "J-23" %>
+<% user.profile = Profile.new %>
+<% user.profile.name = "Hans" %>
+<% user.profile.surname = "Kloss" %>
+<% r(user).form do |user| %>
+  <%= user.profile.name.text_field%>
 <% end%>

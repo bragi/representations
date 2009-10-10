@@ -13,9 +13,6 @@ module ResourceRepresentations
   
   class Representation
     
-    attr_accessor :output_buffer
-    attr_accessor :template
-    attr_accessor :parent
     
     def initialize(value, template, name=nil, parent=nil)
       @value = value
@@ -28,7 +25,7 @@ module ResourceRepresentations
       ERB::Util::h(@value.to_s)
     end
     def delegate_method(method_name, *args)
-      template.send(method_name, *args)
+      @template.send(method_name, *args)
     end
     def with_block(&block)
       yield self if block_given?
@@ -39,25 +36,19 @@ module ResourceRepresentations
     def label
       %Q{<label for="#{name}">#{ERB::Util::h(name.humanize)}</label>}
     end
-    
+     
     def text_field
-      Rails.logger.debug "Name: #{name}"
-      Rails.logger.debug "Parent.name: #{parent.name}" unless @parent.nil?
-      root_name = ''
       children = Array.new
-      if parent.nil?
-        root_name += @name
-      else
-        _parent = @parent
-        begin
-          children.push(@name)
-          root_name = _parent.name
-          _parent = @parent.parent
-        end while _parent != nil #iterate children to find the top parent
-      end
-      name_attr_value = root_name
+      children.push(@name)
+      parent = @parent
+      while parent.nil? == false do #iterate parent tree
+       children.push(parent.instance_variable_get(:@name))
+       parent = parent.instance_variable_get(:@parent)
+      end #children looks something like that [name, profile, user]
+      name_attr_value = children.pop 
+      children.reverse!
       children.each do |x| 
-        name_attr_value += "[" + x + "]" 
+        name_attr_value += "[" + x + "]"
       end
       %Q{<input type="text" name="#{name_attr_value}" value="#{@value}" id="#{@name}"/>}
     end

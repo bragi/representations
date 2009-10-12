@@ -34,20 +34,20 @@ module ResourceRepresentations
   
   class DefaultRepresentation < Representation
     def label
-      %Q{<label for="#{name}">#{ERB::Util::h(name.humanize)}</label>}
+      %Q{<label for="#{@name}">#{ERB::Util::h(@name.humanize)}</label>}
     end
      
     def text_field
-      children = Array.new
-      children.push(@name)
+      children_names = Array.new
+      children_names.push(@name)
       parent = @parent
       while parent.nil? == false do #iterate parent tree
-       children.push(parent.instance_variable_get(:@name))
+       children_names.push(parent.instance_variable_get(:@name))
        parent = parent.instance_variable_get(:@parent)
-      end #children looks something like that [name, profile, user]
-      name_attr_value = children.pop 
-      children.reverse!
-      children.each do |x| 
+      end #children_names now looks something like that [name, profile, user]
+      name_attr_value = children_names.pop 
+      children_names.reverse!
+      children_names.each do |x| 
         name_attr_value += "[" + x + "]"
       end
       %Q{<input type="text" name="#{name_attr_value}" value="#{@value}" id="#{@name}"/>}

@@ -15,21 +15,26 @@ Rails helpers:
       = h(user.login)
       = f.label(:email, "Email")
       = f.text_field(:email)
-      - fields_for(user.profile) do |p|
-        Full name:
-        = h(full_name(p))
-        = f.label(:first_name, "First name")
-        = f.text_field(:first_name)
-        = f.label(:last_name, "Last name")
-        = f.text_field(:last_name)
+      - if user.profile
+        - fields_for(user.profile) do |p|
+            Full name:
+            = h(full_name(p))
+            = f.label(:first_name, "First name")
+            = f.text_field(:first_name)
+            = f.label(:last_name, "Last name")
+            = f.text_field(:last_name)
       = f.submit("Submit")
 
 Resource Representations
 
-    - user = r(user)
-    - user.form do
+    - r(user).form do
       login:
       = user.login
       = user.email.label
       = user.email.text_field
-      
+      - user.profile do |p|
+        = full_name(p)
+        = p.first_name.label
+        = p.first_name.text_field
+        = p.last_name.label
+        = p.last_name.text_field

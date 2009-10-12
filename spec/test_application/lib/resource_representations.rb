@@ -78,7 +78,7 @@ module ResourceRepresentations
         def #{method_name}(*args, &block)
           @#{method_name}_VAR_REPRESENTATION_SUFFIX ||= ResourceRepresentations.representation_for(@value.#{method_name}, @template, "#{method_name}", self)
           @#{method_name}_VAR_REPRESENTATION_SUFFIX.with_block(&block)
-          @#{method_name}_VAR_REPRESENTATION_SUFFIX
+          @#{method_name}_VAR_REPRESENTATION_SUFFIX if block.nil?
         end
       EOF
       self.class.class_eval(method, __FILE__, __LINE__)

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091009082255) do
+ActiveRecord::Schema.define(:version => 20091013090740) do
 
   create_table "profiles", :force => true do |t|
     t.string  "name"
@@ -18,7 +18,9 @@ ActiveRecord::Schema.define(:version => 20091009082255) do
   end
 
   create_table "users", :force => true do |t|
-    t.string "nick"
+    t.string   "nick"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
 end

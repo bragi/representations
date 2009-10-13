@@ -1,9 +1,11 @@
 <p>New user</p>
 <% user = User.new %>
 <% user.nick = "J-23" %>
+<% user.created_at = Time.now %>
 <% user.profile = Profile.new %>
 <% user.profile.name = "Hans" %>
 <% user.profile.surname = "Kloss" %>
 <% r(user).form do |user| %>
+  <%= user.created_at.select %>
   <%= user.profile.name.text_field%>
 <% end%>

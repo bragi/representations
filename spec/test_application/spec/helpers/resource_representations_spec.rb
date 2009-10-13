@@ -13,10 +13,15 @@ describe ResourceRepresentations do
     user = ResourceRepresentations::representation_for(user, nil)
     user.profile.should be_a_kind_of(ResourceRepresentations::NilClassRepresentation)
   end
-  it "should create defaultRepresentation for non AR and non Nil objects" do
+  it "should create defaultRepresentation for non AR, non Nil and non ActiveSupport::TimeWithZone objects" do
     user = stub_model(User, { :nick => "some nick"})
     user = ResourceRepresentations::representation_for(user, nil)
     user.nick.should be_a_kind_of(ResourceRepresentations::DefaultRepresentation)
+  end
+  it "should create TimeWithZoneRepresenation for ActiveSupport::TimeWithZone" do
+    user = stub_model(User, { :created_at => Time.zone.now})
+    user = ResourceRepresentations::representation_for(user, nil)
+    user.created_at.should be_a_kind_of(ResourceRepresentations::TimeWithZoneRepresentation)
   end
   it "should create proper chain of Representations" do
     profile = stub_model(Profile, {:name => "some name", :surname => nil})

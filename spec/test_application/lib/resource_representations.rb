@@ -71,10 +71,6 @@ module ResourceRepresentations
       tree = get_parents_tree
       %Q{<input type="text" name="#{get_html_name_attribute_value(tree)}" value="#{@value}" id="#{@name}"/>}
     end
-    def radio_button(method)
-      tree = get_parents_tree
-      model_name = tree.delete_at(0)
-    end
   end
   class NilClassRepresentation < Representation
     def method_missing(method_name, *args)

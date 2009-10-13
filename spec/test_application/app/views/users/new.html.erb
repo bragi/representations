@@ -1,4 +1,7 @@
 <p>New user</p>
+<% form_tag('dummy') do %>
+  <%= radio_button('user', 'profile[eye_color]', 'blue') %>
+<% end %>
 <% user = User.new %>
 <% user.nick = "J-23" %>
 <% user.created_at = Time.now %>

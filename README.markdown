@@ -23,6 +23,8 @@ Rails helpers:
             = f.text_field(:first_name)
             = f.label(:last_name, "Last name")
             = f.text_field(:last_name)
+            = f.radio_button(:eye_color, 'blue')
+            = f.label(:eye_color_blue, "Blue")
       = f.submit("Submit")
 
 Resource Representations
@@ -38,3 +40,5 @@ Resource Representations
         = p.first_name.text_field
         = p.last_name.label
         = p.last_name.text_field
+        = p.eye_color.radio_button('blue')
+        = p.eye_color.radio_button_label('blue', 'Blue')

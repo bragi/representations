@@ -7,8 +7,15 @@
 <% @user.profile.surname = "Kloss" %>
 <% @user.profile.eye_color = "Blue" %>
 <% r(@user).form do |user| %>
-  <%= user.created_at.select %>
   <%= user.profile.name.text_field%>
-  <%= user.profile.eye_color.radio_button('red')%>
+  <br/>
+  <%= user.created_at.select %>
+  <br/>
+  <%= user.profile.eye_color.radio_button('brown')%>
+  <%= user.profile.eye_color.radio_button_label('brown', 'Click on me to check the radio button')%>
+  <br/>
+  <%= user.profile.eye_color.radio_button('black')%>
+  <%= user.profile.eye_color.radio_button_label('black', 'Click on me to check the radio button')%>
+  <br/>
   <%= submit_tag('Ok') %>
 <% end%>

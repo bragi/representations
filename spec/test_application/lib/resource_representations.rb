@@ -73,9 +73,15 @@ module ResourceRepresentations
     end
     def radio_button(value)
       tree = get_parents_tree
-      id_attr_value = tree.join('_')
+      id_attr_value = tree.join('_') + "_#{value}"
       name_attr_value = get_html_name_attribute_value(tree)
-      %Q{<input type="radio" name="#{name_attr_value}" value="#{value}" id="#{id_attr_value}" checked="#{@value==value}"/>}
+      %Q{<input type="radio" name="#{name_attr_value}" value="#{value}" id="#{id_attr_value}" checked="#{@value.capitalize==value.capitalize}"/>}
+    end
+    def radio_button_label(radio_button_value, value = nil)
+      tree = get_parents_tree
+      for_attr_value = tree.join('_') + "_#{radio_button_value}"
+      value = radio_button_value.capitalize if value.nil?
+      %Q{<label for="#{for_attr_value}">#{ERB::Util::h(value)}</label>}
     end
   end
   class NilClassRepresentation < Representation

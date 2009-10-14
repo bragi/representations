@@ -1,0 +1,12 @@
+blue_eyes:
+    id: 1
+    color: "blue"
+green_eyes:
+    id: 2
+    color: "green"
+black_eyes:
+    id: 3
+    color: "black"
+brown_eyes:
+    id: 4
+    color: "brown"

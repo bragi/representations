@@ -79,6 +79,28 @@ module ResourceRepresentations
 
   class DefaultRepresentation < Representation
 
+    #not tested in the view
+    def check_box(checked_value = "1", unchecked_value = "0", html_options = {})
+      tree = get_parents_tree
+      id_attr_value = tree.join('_') 
+      name_attr_value = get_html_name_attribute_value(tree)
+      tags = get_tags(html_options, {:value => checked_value, :id => id_attr_value, :name=>name_attr_value})
+      %Q{<input type="checkbox" #{tags}/>\n<input type="hidden" value="#{unchecked_value}" id="#{id_attr_value}" name="#{name_attr_value}"/>}
+    end
+    #not tested in the view
+    def file_field(html_options = {})
+      tree = get_parents_tree
+      id_attr_value = tree.join('_') 
+      tags = get_tags(html_options, {:value => to_s, :id => id_attr_value, :name=>get_html_name_attribute_value(tree)})
+      %Q{<input type="file" #{tags}/>}
+    end
+    #not tested in the view
+    def hidden_field(html_options = {})
+      tree = get_parents_tree
+      id_attr_value = tree.join('_') 
+      tags = get_tags(html_options, {:value => to_s, :id => id_attr_value, :name=>get_html_name_attribute_value(tree)})
+      %Q{<input type="hidden" #{tags}/>}
+    end
     def text_field(html_options = {})
       tree = get_parents_tree
       id_attr_value = tree.join('_') 
@@ -89,7 +111,7 @@ module ResourceRepresentations
       tree = get_parents_tree
       id_attr_value = tree.join('_') 
       tags = get_tags(html_options, {:id => id_attr_value, :name => get_html_name_attribute_value(tree)})
-      %Q{<textarea #{tags}>#{to_s}</textarea>}
+      %Q{<textarea #{tags}>\n#{to_s}\n</textarea>}
     end
     def password_field(html_options = {})
       tree = get_parents_tree

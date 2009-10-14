@@ -78,6 +78,9 @@ module ResourceRepresentations
     end
     def with_block(&block)
     end
+    def to_s
+      return ''
+    end
   end
   class ActiveRecordRepresentation < Representation
     def form(&block)

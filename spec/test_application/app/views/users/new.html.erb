@@ -3,14 +3,12 @@
 <% @user.nick = "J-23" %>
 <% @user.created_at = Time.now %>
 <% @user.profile = Profile.new %>
-<% @profile = @user.profile %>
 <% @user.profile.name = "Hans" %>
 <% @user.profile.surname = "Kloss" %>
+<% @user.profile.eye_color = "Blue" %>
 <% r(@user).form do |user| %>
   <%= user.created_at.select %>
   <%= user.profile.name.text_field%>
+  <%= user.profile.eye_color.radio_button('red')%>
+  <%= submit_tag('Ok') %>
 <% end%>
-<% form_tag('dummy') do %>
-  <%= radio_button('profile', 'eye_color', 'blue') %>
-
-<% end %>

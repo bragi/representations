@@ -8,19 +8,19 @@
 <% @user.profile.eye_color = "Blue" %>
 <% @user.profile.characteristics = "Black haired man at late afternoon" %>
 <% r(@user).form do |user| %>
-  <%= user.profile.name.text_field%>
+  <%= user.profile.name.text_field(:class => "name_text_field_class")%>
   <br/>
-  <%= user.created_at.select %>
+  <%= user.created_at.select({}, :class => "created_at_select_class") %>
   <br/>
-  <%= user.profile.characteristics.text_area %>
+  <%= user.profile.characteristics.text_area(:cols => 20, :rows => 10) %>
   <br/>
-  <%= user.profile.eye_color.radio_button('brown')%>
+  <%= user.profile.eye_color.radio_button('brown', :class => "eye_color_rb_class")%>
   <%= user.profile.eye_color.radio_button_label('brown', 'Click on me to check the radio button')%>
   <br/>
-  <%= user.profile.eye_color.radio_button('black')%>
+  <%= user.profile.eye_color.radio_button('black', :class => "eye_color_rb_class")%>
   <%= user.profile.eye_color.radio_button_label('black', 'Click on me to check the radio button')%>
   <br/>
-  <%= user.profile.eye_color.radio_button('blue')%>
+  <%= user.profile.eye_color.radio_button('blue', :class => "eye_color_rb_class")%>
   <%= user.profile.eye_color.radio_button_label('blue', 'Click on me to check the radio button')%>
   <br/>
   <%= submit_tag('Ok') %>

@@ -60,33 +60,44 @@ module ResourceRepresentations
       end
       name
     end
+    def get_tags(user_options, base_options)
+      base_options.merge!(user_options)
+      base_options.stringify_keys!
+      base_options.map{ |key, value| %(#{key}="#{value}" ) }
+    end
   end
 
   class DefaultRepresentation < Representation
-    def label
-      %Q{<label for="#{@name}">#{ERB::Util::h(@name.humanize)}</label>}
+    def label(html_options = {})
+      tags = get_tags(html_options, {:for => "#{@name}"})
+      %Q{<label #{tags}>#{ERB::Util::h(@name.humanize)}</label>}
     end
 
-    def text_field
-      tree = get_parents_tree
-      %Q{<input type="text" name="#{get_html_name_attribute_value(tree)}" value="#{@value}" id="#{@name}"/>}
-    end
-    def text_area(options = {})
+    def text_field(html_options = {})
       tree = get_parents_tree
       id_attr_value = tree.join('_') 
-      %Q{<textarea id="#{id_attr_value}" name="#{get_html_name_attribute_value(tree)}">#{@value}</textarea>}
+      tags = get_tags(html_options, {:value => "#{@value}", :id => "#{id_attr_value}", :name=>"#{get_html_name_attribute_value(tree)}"})
+      %Q{<input type="text" #{tags}/>}
     end
-    def radio_button(value)
+    def text_area(html_options = {})
+      tree = get_parents_tree
+      id_attr_value = tree.join('_') 
+      tags = get_tags(html_options, {:id => "#{id_attr_value}", :name => "#{get_html_name_attribute_value(tree)}"})
+      %Q{<textarea #{tags}>#{@value}</textarea>}
+    end
+    def radio_button(value, html_options = {})
       tree = get_parents_tree
       id_attr_value = tree.join('_') + "_#{value}"
       name_attr_value = get_html_name_attribute_value(tree)
-      %Q{<input type="radio" name="#{name_attr_value}" value="#{value}" id="#{id_attr_value}" checked="#{@value.capitalize==value.capitalize}"/>}
+      tags = get_tags(html_options, {:name => "#{name_attr_value}", :value=>"#{value}", :id=>"#{id_attr_value}", :checked=>"#{@value.capitalize==value.capitalize}"})
+      %Q{<input type="radio" #{tags}/>}
     end
-    def radio_button_label(radio_button_value, value = nil)
+    def radio_button_label(radio_button_value, value = nil, html_options = {})
       tree = get_parents_tree
       for_attr_value = tree.join('_') + "_#{radio_button_value}"
       value = radio_button_value.capitalize if value.nil?
-      %Q{<label for="#{for_attr_value}">#{ERB::Util::h(value)}</label>}
+      tags = get_tags(html_options, {:for => "#{for_attr_value}"})
+      %Q{<label #{tags}>#{ERB::Util::h(value)}</label>}
     end
   end
   class NilClassRepresentation < Representation

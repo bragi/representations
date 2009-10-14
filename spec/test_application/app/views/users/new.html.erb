@@ -6,10 +6,13 @@
 <% @user.profile.name = "Hans" %>
 <% @user.profile.surname = "Kloss" %>
 <% @user.profile.eye_color = "Blue" %>
+<% @user.profile.characteristics = "Black haired man at late afternoon" %>
 <% r(@user).form do |user| %>
   <%= user.profile.name.text_field%>
   <br/>
   <%= user.created_at.select %>
+  <br/>
+  <%= user.profile.characteristics.text_area %>
   <br/>
   <%= user.profile.eye_color.radio_button('brown')%>
   <%= user.profile.eye_color.radio_button_label('brown', 'Click on me to check the radio button')%>

@@ -71,6 +71,11 @@ module ResourceRepresentations
       tree = get_parents_tree
       %Q{<input type="text" name="#{get_html_name_attribute_value(tree)}" value="#{@value}" id="#{@name}"/>}
     end
+    def text_area(options = {})
+      tree = get_parents_tree
+      id_attr_value = tree.join('_') 
+      %Q{<textarea id="#{id_attr_value}" name="#{get_html_name_attribute_value(tree)}">#{@value}</textarea>}
+    end
     def radio_button(value)
       tree = get_parents_tree
       id_attr_value = tree.join('_') + "_#{value}"

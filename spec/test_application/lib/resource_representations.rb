@@ -42,6 +42,16 @@ module ResourceRepresentations
 
       self.__send__(method_name, &block)
     end
+    def label(value, html_options = {})
+      tree = get_parents_tree
+      for_attr_value = tree.join('_')
+      tags = get_tags(html_options, {:for => for_attr_value})
+      value = ERB::Util::h(@name.humanize) if value.nil?
+      %Q{<label #{tags}>#{value}</label>}
+    end
+
+
+
     protected
     def get_parents_tree
       children_names = Array.new
@@ -68,35 +78,37 @@ module ResourceRepresentations
   end
 
   class DefaultRepresentation < Representation
-    def label(html_options = {})
-      tags = get_tags(html_options, {:for => "#{@name}"})
-      %Q{<label #{tags}>#{ERB::Util::h(@name.humanize)}</label>}
-    end
 
     def text_field(html_options = {})
       tree = get_parents_tree
       id_attr_value = tree.join('_') 
-      tags = get_tags(html_options, {:value => "#{@value}", :id => "#{id_attr_value}", :name=>"#{get_html_name_attribute_value(tree)}"})
+      tags = get_tags(html_options, {:value => to_s, :id => id_attr_value, :name=>get_html_name_attribute_value(tree)})
       %Q{<input type="text" #{tags}/>}
     end
     def text_area(html_options = {})
       tree = get_parents_tree
       id_attr_value = tree.join('_') 
-      tags = get_tags(html_options, {:id => "#{id_attr_value}", :name => "#{get_html_name_attribute_value(tree)}"})
-      %Q{<textarea #{tags}>#{@value}</textarea>}
+      tags = get_tags(html_options, {:id => id_attr_value, :name => get_html_name_attribute_value(tree)})
+      %Q{<textarea #{tags}>#{to_s}</textarea>}
+    end
+    def password_field(html_options = {})
+      tree = get_parents_tree
+      id_attr_value = tree.join('_') 
+      tags = get_tags(html_options, {:value => to_s, :id => id_attr_value, :name=>get_html_name_attribute_value(tree)})
+      %Q{<input type="password" #{tags}/>}
     end
     def radio_button(value, html_options = {})
       tree = get_parents_tree
       id_attr_value = tree.join('_') + "_#{value}"
       name_attr_value = get_html_name_attribute_value(tree)
-      tags = get_tags(html_options, {:name => "#{name_attr_value}", :value=>"#{value}", :id=>"#{id_attr_value}", :checked=>"#{@value.capitalize==value.capitalize}"})
+      tags = get_tags(html_options, {:name => name_attr_value, :value=>value, :id=>id_attr_value, :checked=>"#{@value.capitalize==value.capitalize}"})
       %Q{<input type="radio" #{tags}/>}
     end
     def radio_button_label(radio_button_value, value = nil, html_options = {})
       tree = get_parents_tree
       for_attr_value = tree.join('_') + "_#{radio_button_value}"
       value = radio_button_value.capitalize if value.nil?
-      tags = get_tags(html_options, {:for => "#{for_attr_value}"})
+      tags = get_tags(html_options, {:for => for_attr_value})
       %Q{<label #{tags}>#{ERB::Util::h(value)}</label>}
     end
   end

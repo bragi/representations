@@ -4,6 +4,7 @@ class CreateProfiles < ActiveRecord::Migration
       t.string :name
       t.text :surname
       t.belongs_to :user
+      t.string :eye_color
     end
   end
 

@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
-require 'resource_representations'
+require 'representations'
 
-describe ResourceRepresentations::TimeWithZoneRepresentation do
+describe Representations::TimeWithZoneRepresentation do
 
   #it "::select should create proper select tags for date" do
     #user = stub_model(User, {:created_at => Time.zone.now})

@@ -1,9 +1,9 @@
-module ResourceRepresentations
+module Representations
   def representation_for(object, template, name=nil, parent=nil)
     representation_class = if object.is_a?(ActiveRecord::Base)
       ActiveRecordRepresentation
     else
-      "ResourceRepresentations::#{object.class.to_s.demodulize}Representation".constantize rescue DefaultRepresentation
+      "Representations::#{object.class.to_s.demodulize}Representation".constantize rescue DefaultRepresentation
     end
     representation_class.new(object, template, name, parent)
   end
@@ -33,12 +33,12 @@ module ResourceRepresentations
     def method_missing(method_name, *args, &block)
       method = <<-EOF
         def #{method_name}(*args, &block)
-          @__#{method_name} ||= ResourceRepresentations.representation_for(@value.#{method_name}, @template, "#{method_name}", self)
+          @__#{method_name} ||= Representations.representation_for(@value.#{method_name}, @template, "#{method_name}", self)
           @__#{method_name}.with_block(&block)
           @__#{method_name} if block.nil?
         end
       EOF
-      ::ResourceRepresentations::ActiveRecordRepresentation.class_eval(method, __FILE__, __LINE__)
+      ::Representations::ActiveRecordRepresentation.class_eval(method, __FILE__, __LINE__)
 
       self.__send__(method_name, &block)
     end

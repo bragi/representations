@@ -1,1 +1,1 @@
-../../../lib/representations.rb
+../../../gem/lib/representations.rb

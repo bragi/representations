@@ -15,11 +15,11 @@
   <%= user.profile.name.text_field(:class => "text_field_class")%>
   <br/>
   <%= user.created_at.label("User's creation date")%>
-  <%= user.created_at.select({}, :class => "select_class") %>
+  <%= user.created_at.select({}, :class => "select_class")%>
   <br/>
   <%= user.nick.label("User's characteristics")%>
   <br/>
-  <%= user.profile.characteristics.text_area(:cols => 20, :rows => 10) %>
+  <%= user.profile.characteristics.text_area(:cols => 20, :rows => 10)%>
   <br/>
   <%= user.nick.label("User's color of eyes")%>
   <br/>

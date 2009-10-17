@@ -27,7 +27,8 @@ Resource representations change syntax to object oriented and model specific.}
      "init.rb",
      "lib/representations.rb",
      "lib/view_helpers.rb",
-     "rails/init.rb"
+     "rails/init.rb",
+     "representations.gemspec"
   ]
   s.homepage = %q{http://github.com/bragi/representations}
   s.rdoc_options = ["--charset=UTF-8"]

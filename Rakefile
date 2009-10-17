@@ -26,8 +26,9 @@ Resource representations change syntax to object oriented and model specific."
   ]
     gemspec.test_files.exclude('spec/**/*')
   end
+  Jeweler::GemcutterTasks.new
 rescue LoadError
-  puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
+  puts "Jeweler (or a dependency) not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
 end
 
 require 'spec/rake/spectask'

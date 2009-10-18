@@ -32,12 +32,12 @@ module Representations
       ERB::Util::h(@value.to_s)
     end
     #returns html label tag for the representation
-    def label(value, html_options = {})
+    def label(value = nil, html_options = {})
       tree = get_parents_tree
       for_attr_value = tree.join('_')
       tags = get_tags(html_options, {:for => for_attr_value})
       value = ERB::Util::h(@name.humanize) if value.nil?
-      %Q{<label #{tags}>#{value}</label>}
+      %Q{<label #{tags}>#{value ||= @name}</label>}
     end
 
     protected

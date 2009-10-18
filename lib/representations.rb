@@ -71,9 +71,10 @@ module Representations
     end
     #Returns string created by merging two hashes of html options passed as an argument
     def get_tags(user_options, base_options)
-      base_options.merge!(user_options)
-      base_options.stringify_keys!
-      base_options.map{ |key, value| %(#{key}="#{value}" ) }
+      options = base_options.merge(user_options)
+      options.stringify_keys!
+      options = options.sort
+      options.map{ |key, value| %(#{key}="#{value}" ) }
     end
   end
 

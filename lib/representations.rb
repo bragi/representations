@@ -37,7 +37,7 @@ module Representations
       for_attr_value = tree.join('_')
       tags = get_tags(html_options, {:for => for_attr_value})
       value = ERB::Util::h(@name.humanize) if value.nil?
-      %Q{<label #{tags}>#{value ||= @name}</label>}
+      %Q{<label #{tags}>#{value}</label>}
     end
 
     protected

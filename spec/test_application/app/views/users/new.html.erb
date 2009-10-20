@@ -9,6 +9,7 @@
 <% @user.profile.characteristics = "Black haired man at late afternoon" %>
 <% r(@user).form do |user| %>
   <%= user.nick.label("User's nickname")%>
+  <%= user.nick.lolspeak()%>
   <%= user.nick.password_field(:class => "password_field_class")%>
   <br/>
   <%= user.nick.label("User's name")%>

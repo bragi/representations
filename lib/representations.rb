@@ -22,7 +22,7 @@ module Representations
       @name = name
       @template = template
       @parent = parent
-      #extend class if user provided file for customisation
+      #extend class if user provided appropriate file (look at the files app/representations/*_representation.rb)
       self.send(:extend, "::#{self.class.to_s.demodulize}".constantize) rescue Rails.logger.info "No extension defined for ::#{self.class.to_s.demodulize}"
      end
 

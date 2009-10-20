@@ -186,7 +186,6 @@ module Representations
             end
          EOF
         ::Representations::ActiveRecordRepresentation.class_eval(method, __FILE__, __LINE__)
-
         self.__send__(method_name, &block)
       end
     end

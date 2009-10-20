@@ -16,13 +16,13 @@ Resource representations change syntax to object oriented and model specific.}
   s.email = %q{skimos00@gmail.com}
   s.extra_rdoc_files = [
     "LICENSE.txt",
-     "README.rdoc"
+     "README.markdown"
   ]
   s.files = [
     ".document",
      ".gitignore",
      "LICENSE.txt",
-     "README.rdoc",
+     "README.markdown",
      "Rakefile",
      "VERSION",
      "init.rb",

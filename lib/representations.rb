@@ -22,12 +22,8 @@ module Representations
       @name = name
       @template = template
       @parent = parent
-      begin #extend class if user provided file for customisation
-        self.send(:extend, "::#{self.class.to_s.demodulize}".constantize) 
-      rescue
-        puts "::#{self.class.to_s.demodulize} not defined"
-        #procced then (user did not provide file for customisation of the class)
-      end
+      #extend class if user provided file for customisation
+      self.send(:extend, "::#{self.class.to_s.demodulize}".constantize) rescue Rails.logger.info "No extension defined for ::#{self.class.to_s.demodulize}"
      end
 
     def id
@@ -56,7 +52,7 @@ module Representations
       children_names = Array.new
       parent = @parent
       children_names.push(@name)
-      while parent.nil? == false do #iterate parent tree
+      while parent do #iterate parent tree
         children_names.push(parent.instance_variable_get(:@name))
         parent = parent.instance_variable_get(:@parent)
       end #children_names now looks something like that [name, profile, user]

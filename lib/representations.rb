@@ -23,7 +23,7 @@ module Representations
       @template = template
       @parent = parent
       #extend class if user provided appropriate file (look at the files app/representations/*_representation.rb)
-      self.send(:extend, "::#{self.class.to_s.demodulize}".constantize) rescue Rails.logger.info "No extension defined for ::#{self.class.to_s.demodulize}"
+      self.send(:extend, "::#{self.class.to_s.demodulize}".constantize) rescue Rails.logger.info "No extension defined for ::#{self.class.to_s}"
      end
 
     def id
@@ -50,13 +50,13 @@ module Representations
     #Returns array of Represantation objects which are linked together by @parent field
     def get_parents_tree
       children_names = Array.new
+      children_names.push @name
       parent = @parent
-      children_names.push(@name)
       while parent do #iterate parent tree
-        children_names.push(parent.instance_variable_get(:@name))
+        children_names.unshift(parent.instance_variable_get(:@name))
         parent = parent.instance_variable_get(:@parent)
-      end #children_names now looks something like that [name, profile, user]
-      children_names.reverse!
+      end #children_names now looks something like that [user, profile, name]
+      children_names
     end
     #Creates value of the html name attribute according to passed tree of objects
     def get_html_name_attribute_value(tree)

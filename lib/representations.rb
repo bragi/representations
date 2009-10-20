@@ -22,7 +22,13 @@ module Representations
       @name = name
       @template = template
       @parent = parent
-    end
+      begin #extend class if user provided file for customisation
+        self.send(:extend, "::#{self.class.to_s.demodulize}".constantize) 
+      rescue
+        puts "::#{self.class.to_s.demodulize} not defined"
+        #procced then (user did not provide file for customisation of the class)
+      end
+     end
 
     def id
       @value
@@ -54,7 +60,7 @@ module Representations
         children_names.push(parent.instance_variable_get(:@name))
         parent = parent.instance_variable_get(:@parent)
       end #children_names now looks something like that [name, profile, user]
-      children_names.reverse
+      children_names.reverse!
     end
     #Creates value of the html name attribute according to passed tree of objects
     def get_html_name_attribute_value(tree)
@@ -79,7 +85,9 @@ module Representations
   end
 
   class DefaultRepresentation < Representation
-
+    #require_dependency "#{RAILS_ROOT}/app/representations/default_representation"
+    #require "#{RAILS_ROOT}/app/representations/default_representation"
+    #include DefaultRepresentationExt
     #not tested in the view
     #Returns string with html check box tag
     def check_box(checked_value = "1", unchecked_value = "0", html_options = {})
@@ -107,6 +115,7 @@ module Representations
     end
     #Returns string with html text input tag
     def text_field(html_options = {})
+      puts "#{RAILS_ROOT}/app/representations/default_representation"
       tree = get_parents_tree
       id_attr_value = tree.join('_') 
       tags = get_tags(html_options, {:value => to_s, :id => id_attr_value, :name=>get_html_name_attribute_value(tree)})

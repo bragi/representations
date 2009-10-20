@@ -81,9 +81,6 @@ module Representations
   end
 
   class DefaultRepresentation < Representation
-    #require_dependency "#{RAILS_ROOT}/app/representations/default_representation"
-    #require "#{RAILS_ROOT}/app/representations/default_representation"
-    #include DefaultRepresentationExt
     #not tested in the view
     #Returns string with html check box tag
     def check_box(checked_value = "1", unchecked_value = "0", html_options = {})

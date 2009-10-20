@@ -1,0 +1,72 @@
+------------------------------------------------------------ Class: Hash
+     A +Hash+ is a collection of key-value pairs. It is similar to an
+     +Array+, except that indexing is done via arbitrary keys of any
+     object type, not an integer index. The order in which you traverse
+     a hash by either key or value may seem arbitrary, and will
+     generally not be in the insertion order.
+
+     Hashes have a _default value_ that is returned when accessing keys
+     that do not exist in the hash. By default, that value is +nil+.
+
+     +Hash+ uses +key.eql?+ to test keys for equality. If you need to
+     use instances of your own classes as keys in a +Hash+, it is
+     recommended that you define both the +eql?+ and +hash+ methods. The
+     +hash+ method must have the property that +a.eql?(b)+ implies
+     +a.hash == b.hash+.
+
+       class MyClass
+         attr_reader :str
+         def initialize(str)
+           @str = str
+         end
+         def eql?(o)
+           o.is_a?(MyClass) && str == o.str
+         end
+         def hash
+           @str.hash
+         end
+       end
+     
+       a = MyClass.new("some string")
+       b = MyClass.new("some string")
+       a.eql? b  #=> true
+     
+       h = {}
+     
+       h[a] = 1
+       h[a]      #=> 1
+       h[b]      #=> 1
+     
+       h[b] = 2
+       h[a]      #=> 2
+       h[b]      #=> 2
+
+------------------------------------------------------------------------
+
+
+Includes:
+---------
+     Enumerable(all?, any?, collect, count, cycle, detect, drop,
+     drop_while, each_cons, each_slice, each_with_index, entries,
+     enum_cons, enum_slice, enum_with_index, find, find_all, find_index,
+     first, grep, group_by, include?, inject, map, max, max_by, member?,
+     min, min_by, minmax, minmax_by, none?, one?, partition, reduce,
+     reject, reverse_each, select, sort, sort_by, take, take_while,
+     to_a, to_json, to_set, zip)
+
+
+Class methods:
+--------------
+     [], new
+
+
+Instance methods:
+-----------------
+     ==, [], []=, clear, default, default=, default_proc, delete,
+     delete_if, each, each_key, each_pair, each_value, empty?, eql?,
+     fetch, has_key?, has_value?, hash, include?, index, indexes,
+     indices, initialize_copy, inspect, invert, key?, keys, length,
+     member?, merge, merge!, pretty_print, pretty_print_cycle, rehash,
+     reject, reject!, replace, select, shift, size, sort, store, to_a,
+     to_hash, to_s, to_yaml, update, value?, values, values_at,
+     yaml_initialize

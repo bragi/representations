@@ -16,7 +16,7 @@ module Representations
 
     #value - object for which the representation is created 
     #template - template view
-    #name - the actuall name of the method that was called on the parent object of the object that is initialize
+    #name - the actuall name of the method that was called on the object's parent that is being initialize
     def initialize(value, template, name=nil, parent=nil)
       @value = value
       @name = name
@@ -31,12 +31,8 @@ module Representations
     def to_s
       ERB::Util::h(@value.to_s)
     end
-    #Call the passed block (if any) 
-    def with_block(&block)
-      yield self if block_given?
-    end
     #returns html label tag for the representation
-    def label(value, html_options = {})
+    def label(value = nil, html_options = {})
       tree = get_parents_tree
       for_attr_value = tree.join('_')
       tags = get_tags(html_options, {:for => for_attr_value})
@@ -45,7 +41,11 @@ module Representations
     end
 
     protected
-    #returns array of Represantation objects which are linked together by @parent field
+    #Call the passed block (if any) 
+    def with_block(&block)
+      yield self if block_given?
+    end
+    #Returns array of Represantation objects which are linked together by @parent field
     def get_parents_tree
       children_names = Array.new
       parent = @parent
@@ -56,7 +56,7 @@ module Representations
       end #children_names now looks something like that [name, profile, user]
       children_names.reverse
     end
-    #creates value of the html name attribute according to passed tree of objects
+    #Creates value of the html name attribute according to passed tree of objects
     def get_html_name_attribute_value(tree)
       root_name = tree.delete_at(0)
       name = Array.new
@@ -69,11 +69,12 @@ module Representations
       end
       name.unshift(root_name)
     end
-    #Returns string of merged two hashes of html options passed as an argument
+    #Returns string created by merging two hashes of html options passed as an argument
     def get_tags(user_options, base_options)
-      base_options.merge!(user_options)
-      base_options.stringify_keys!
-      base_options.map{ |key, value| %(#{key}="#{value}" ) }
+      options = base_options.merge(user_options)
+      options.stringify_keys!
+      options = options.sort
+      options.map{ |key, value| %(#{key}="#{value}" ) }
     end
   end
 
@@ -174,7 +175,7 @@ module Representations
       #ar_user = User.new
       #ar_user.nick = 'foo'
       #user = r(ar_user) #user is now ActiveRecordRepresentation
-      #user.nick.text_field #method_missing will be called on user with method_name = 'nick' in which new method for user will be created and will be called. The newly created method will create new DefaultRepresentation with @value set to the string 'foo'. Next the text_field will be called on the newly created DefauleRepresentation
+      #user.nick.text_field #method_missing will be called on user with method_name = 'nick' in which new method for user will be created and will be called. The newly created method will create a new DefaultRepresentation with @value set to the string 'foo'. Next the text_field will be called on the newly created DefauleRepresentation
       #
       def method_missing(method_name, *args, &block)
         method = <<-EOF

@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["\305\201ukasz Piestrzeniewicz", "Adam Sokolnicki"]
-  s.date = %q{2009-10-15}
+  s.date = %q{2009-10-18}
   s.description = %q{Rails helpers, including form builders are great to allow rapid development of applications and views.  
 They are procedural in nature and have hard time to adapt to complex models. They also live in a single namespace making it difficult to find which helpers apply to which models.  
 Resource representations change syntax to object oriented and model specific.}
@@ -20,7 +20,6 @@ Resource representations change syntax to object oriented and model specific.}
   ]
   s.files = [
     ".document",
-     ".gitignore",
      "LICENSE.txt",
      "README.markdown",
      "Rakefile",
@@ -28,12 +27,12 @@ Resource representations change syntax to object oriented and model specific.}
      "init.rb",
      "lib/representations.rb",
      "lib/view_helpers.rb",
-     "rails/init.rb"
+     "rails/init.rb",
+     "representations.gemspec"
   ]
   s.homepage = %q{http://github.com/bragi/representations}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
-  s.require_paths = ["rails"]
   s.rubygems_version = %q{1.3.5}
   s.summary = %q{Changes syntax of rails helpers and form builders to object oriented and model specific}
 

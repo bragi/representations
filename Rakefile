@@ -12,9 +12,23 @@ Resource representations change syntax to object oriented and model specific."
     gemspec.email = "skimos00@gmail.com"
     gemspec.homepage = "http://github.com/bragi/representations"
     gemspec.authors = ["Łukasz Piestrzeniewicz", "Adam Sokolnicki"]
+    gemspec.files = [
+    ".document",
+     "LICENSE.txt",
+     "README.markdown",
+     "Rakefile",
+     "VERSION",
+     "init.rb",
+     "lib/representations.rb",
+     "lib/view_helpers.rb",
+     "rails/init.rb",
+     "representations.gemspec"
+  ]
+    gemspec.test_files.exclude('spec/**/*')
   end
+  Jeweler::GemcutterTasks.new
 rescue LoadError
-  puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
+  puts "Jeweler (or a dependency) not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
 end
 
 require 'spec/rake/spectask'

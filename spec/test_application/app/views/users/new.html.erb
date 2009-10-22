@@ -10,6 +10,12 @@
 <% @user.profile.surname = "Kloss" %>
 <% @user.profile.eye_color = "Blue" %>
 <% @user.profile.characteristics = "Black haired man at late afternoon" %>
+
+
+
+
+
+
 <!--
 <% form_for @user do |user_form| %>
   <% @user.tasks.each do |task| %>
@@ -29,6 +35,16 @@
   <br/>
   <% user.tasks.each do |task|%>
     <%= task.label("Task's title")%>
+    <%= task.title.text_field%>
+    <br/>
+  <% end%>
+  <% user.tasks.new_instance do |task|%>
+    <%= task.label("Task's title for first new task")%>
+    <%= task.title.text_field%>
+    <br/>
+  <% end%>
+  <% user.tasks.new_instance do |task|%>
+    <%= task.label("Task's title for second new task")%>
     <%= task.title.text_field%>
     <br/>
   <% end%>

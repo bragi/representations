@@ -44,8 +44,8 @@ Resource Representations
         = p.eye_color.radio_button_label('blue', 'Blue')
 ###Extensions
 Representations can be altered. For example to add new method DefaultRepresentation create file app/representations/default_representation.rb with the content:
-module DefaultRepresentation
-  def new_method
-    some code
-  end
-end
+    module DefaultRepresentation
+        def new_method
+            some code
+        end
+    end

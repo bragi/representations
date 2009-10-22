@@ -2,14 +2,35 @@
 <% @user = User.new %>
 <% @user.nick = "J-23" %>
 <% @user.created_at = Time.now %>
+<% task0 = Task.new ; task0.id = 0 ; task0.title = "task 0" %>
+<% task1 = Task.new ; task1.id = 1 ; task1.title = "task 1" %>
+<% @user.tasks.push(task0) ; @user.tasks.push(task1) %>
 <% @user.profile = Profile.new %>
 <% @user.profile.name = "Hans" %>
 <% @user.profile.surname = "Kloss" %>
 <% @user.profile.eye_color = "Blue" %>
 <% @user.profile.characteristics = "Black haired man at late afternoon" %>
+
+<% form_for @user do |user_form| %>
+  <% @user.tasks.each do |task| %>
+    <% user_form.fields_for "tasks[]", task do |task_fields| %>
+      Title: <%= task_fields.text_field :title %>
+    <% end %>
+  <% end %>
+  <%= user_form.submit('Ok') %>
+<% end %>
+
 <% r(@user).form do |user| %>
   <%= user.nick.label("User's nickname")%>
   <%= user.nick.lolspeak()%>
+  <br/>
+  <%= user.tasks.label("User's tasks")%>
+  <br/>
+  <% user.tasks.each do |task|%>
+    <%= task.label("Task's title")%>
+    <%= task.title.text_field%>
+    <br/>
+  <% end%>
   <%= user.nick.password_field(:class => "password_field_class")%>
   <br/>
   <%= user.nick.label("User's name")%>

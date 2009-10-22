@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091014102350) do
+ActiveRecord::Schema.define(:version => 20091021102909) do
 
   create_table "profiles", :force => true do |t|
     t.string  "name"
@@ -17,6 +17,13 @@ ActiveRecord::Schema.define(:version => 20091014102350) do
     t.integer "user_id"
     t.string  "eye_color"
     t.text    "characteristics"
+  end
+
+  create_table "tasks", :force => true do |t|
+    t.string  "title"
+    t.date    "due_to"
+    t.text    "description"
+    t.integer "priority"
   end
 
   create_table "users", :force => true do |t|

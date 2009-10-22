@@ -63,7 +63,7 @@ module Representations
       end
       tree #tree now looks something like this [['user', ActiverRecordRepresentation], ['nick', DefaultRepresentation]]
     end
-    #Creates value of the html name attribute according to passed tree 
+    #Creates value of the html name attribute according to the passed tree 
     def get_html_name_attribute_value(tree)
       first = tree.delete_at(0)
       root_name = first[0]
@@ -79,7 +79,7 @@ module Representations
       end
       name.unshift(root_name)
     end
-    #Returns string created by merging two hashes of html options passed as an argument
+    #Returns string created by merging two hashes of html options passed as the arguments
     def get_tags(user_options, base_options)
       options = base_options.merge(user_options)
       options.stringify_keys!
@@ -203,12 +203,11 @@ module Representations
       options = {:defaults => {:day => @value.day, :month => @value.month, :year => @value.year}}
       options.merge!(passed_options)
       tree = get_parents_tree
-      #!TODO
-      #tree.pop
       name = get_html_name_attribute_value(tree)
       @template.date_select(name, @name, options, html_options)
     end
   end
+  #Representation for Collections
   class ArrayRepresentation < ActiveRecordRepresentation
     def each
       @value.each do |object|

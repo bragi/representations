@@ -218,14 +218,5 @@ module Representations
         yield representation_object
       end
     end
-    #Creates value of the html name attribute according to passed tree of objects
-    def get_html_name_attribute_value(tree)
-      root_name = tree.delete_at(0)
-      name = Array.new
-      tree.each_index do |idx| 
-        name[idx] = "[" + tree[idx] + "]"
-      end
-      name.unshift(root_name)
-    end
   end
 end

@@ -10,7 +10,7 @@
 <% @user.profile.surname = "Kloss" %>
 <% @user.profile.eye_color = "Blue" %>
 <% @user.profile.characteristics = "Black haired man at late afternoon" %>
-
+<!--
 <% form_for @user do |user_form| %>
   <% @user.tasks.each do |task| %>
     <% user_form.fields_for "tasks[]", task do |task_fields| %>
@@ -19,6 +19,7 @@
   <% end %>
   <%= user_form.submit('Ok') %>
 <% end %>
+-->
 
 <% r(@user).form do |user| %>
   <%= user.nick.label("User's nickname")%>

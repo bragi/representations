@@ -14,8 +14,9 @@ module Representations
   class Representation 
 
     #value - object for which the representation is created 
-    #template - template view
+    #template - template view (needed because some ActionView::Base methods are private)
     #name - the actuall name of the method that was called on the object's parent that is being initialize
+    #parent - Representation object which contains the object that is being initialize
     def initialize(value, template, name=nil, parent=nil)
       @value = value
       @name = name
@@ -209,6 +210,7 @@ module Representations
   end
   #Representation for Collections
   class ArrayRepresentation < ActiveRecordRepresentation
+    #Creates Representation for every object in the Array and invokes passed block with this Representation as the argument
     def each
       @value.each do |object|
         representation_object = Representations.representation_for(object, @template, object.id.to_s, self)

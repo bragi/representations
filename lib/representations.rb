@@ -2,16 +2,16 @@ module Representations
   #Enables automatic wrapping
   #TODO should be disabled until module unloading will be fixed
   def self.enable_automatic_wrapping=(value)
-    if value
-      ActionView::Base.class_eval do 
-       def instance_variable_set_with_r(symbol, obj)
-         #handle only ActiveRecord::Base objects
-         obj = Representations.representation_for(obj, self, symbol.to_s[1..-1]) if obj.is_a?(ActiveRecord::Base)
-         instance_variable_set_without_r(symbol, obj) #call to the original method
-       end
-       self.alias_method_chain :instance_variable_set, :r
-     end
-    end
+    #if value
+      #ActionView::Base.class_eval do 
+       #def instance_variable_set_with_r(symbol, obj)
+         ##handle only ActiveRecord::Base objects
+         #obj = Representations.representation_for(obj, self, symbol.to_s[1..-1]) if obj.is_a?(ActiveRecord::Base)
+         #instance_variable_set_without_r(symbol, obj) #call to the original method
+       #end
+       #self.alias_method_chain :instance_variable_set, :r
+     #end
+    #end
   end
   #Creates Representation for object passed as a paremeter, type of the representation
   #depends on the type of the object

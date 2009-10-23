@@ -1,4 +1,12 @@
 module Representations
+  #Checks if automatic wrapping should be enabled (default is false)
+  def self.enable_automatic_wrapping
+    @enable_automatic_wrapping || false
+  end
+  #User can set this value to true to enable automatic wrapping
+  def self.enable_automatic_wrapping=(value)
+    @enable_automatic_wrapping = value
+  end
   #Creates Representation for object passed as a paremeter, type of the representation
   #depends on the type of the object
   def representation_for(object, template, name=nil, parent=nil)
@@ -180,12 +188,12 @@ module Representations
       @template.concat("</form>")
       self
     end
-    #Forwards ActiveRecord invocation and wraps result in apropriate Representation
+    #Forwards ActiveRecord invocation and wraps result in appropriate Representation
     #Suppose that User extends ActiveRecord::Base :
     #ar_user = User.new
     #ar_user.nick = 'foo'
     #user = r(ar_user) #user is now ActiveRecordRepresentation
-    #user.nick.text_field #method_missing will be called on user with method_name = 'nick' in which new method for user will be created and will be called. The newly created method will create a new DefaultRepresentation with @value set to the string 'foo'. Next the text_field will be called on the newly created DefauleRepresentation
+    #user.nick.text_field #method_missing will be called on user with method_name = 'nick' in which new method for user will be created and will be called. The newly created method will create a new DefaultRepresentation with @value set to the string 'foo'. Next the text_field will be called on the newly created DefaultRepresentation
     def method_missing(method_name, *args, &block)
       method = <<-EOF
             def #{method_name}(*args, &block)
@@ -222,7 +230,7 @@ module Representations
         yield representation_object
       end
     end
-    #Creates input fields defined in the passed block for newly created object in the collection
+    #Creates new object in the collection and input fields for it defined in the passed block 
     def new_instance
       new_object = @value.build 
       representation_object = ArrayRepresentation::NewRecordRepresentation.new(new_object, @template, 'new_' + num.to_s, self)
@@ -236,6 +244,8 @@ module Representations
     end
     #Representation that wraps newly created ActiveRecord::Base that will be added to some collection
     class NewRecordRepresentation < DefaultRepresentation
+      #Creates new method which wraps call for ActionRecord
+      #New method returns Representation which represents datatype in the appropriate column
       def method_missing(method_name_symbol, *args, &block)
         method_name = method_name_symbol.to_s
         representation_class = "NilClassRepresentation"

@@ -1,10 +1,10 @@
-# Resouce Representations
+# Representations
 
 Rails helpers, including form builders are great to allow rapid development of applications and views.
 
 They are procedural in nature and have hard time to adapt to complex models. They also live in a single namespace making it difficult to find which helpers apply to which models.
 
-Resource representations change syntax to object oriented and model specific.
+Representations change syntax to object oriented and model specific.
 
 ## Example usage
 
@@ -27,7 +27,7 @@ Rails helpers:
             = f.label(:eye_color_blue, "Blue")
       = f.submit("Submit")
 
-Resource Representations
+Representations:
 
     - r(user).form do
       login:
@@ -55,9 +55,7 @@ Representations can be altered. For example to add new method DefaultRepresentat
         = child.name.text_field
         = child.delete_checkbox
         = child.delete_checkbox_label
-
 Or even:
-
     - user.children.build do |child|
         = child.name.label
         = child.name.text_field

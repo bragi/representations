@@ -1,7 +1,2 @@
-class ActionView::Base
-  def instance_variable_set(symbol, obj)
-    obj = r(obj) if Representations::enable_automatic_wrapping
-    super
-  end
-end
-
+#Needs to stay false otherwise module is not unloaded and thus while proccessing second reqeust error araise
+Representations.enable_automatic_wrapping = false

@@ -1,5 +1,5 @@
 module Representations
-  #Checks if automatic wrapping should be enabled (default is false)
+  #Checks if automatic wrapping should be enabled (defaults to false)
   def self.enable_automatic_wrapping
     @enable_automatic_wrapping || false
   end

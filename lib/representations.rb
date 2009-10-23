@@ -237,7 +237,7 @@ module Representations
       end
     end
     #Creates new object in the collection and input fields for it defined in the passed block 
-    def new_instance
+    def build
       new_object = @value.build 
       representation_object = ArrayRepresentation::NewRecordRepresentation.new(new_object, @template, 'new_' + num.to_s, self)
       yield representation_object

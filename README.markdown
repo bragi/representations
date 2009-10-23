@@ -42,10 +42,22 @@ Resource Representations
         = p.last_name.text_field
         = p.eye_color.radio_button('blue')
         = p.eye_color.radio_button_label('blue', 'Blue')
-###Extensions
+##Extensions
 Representations can be altered. For example to add new method DefaultRepresentation create file app/representations/default_representation.rb with the content:
     module DefaultRepresentation
         def new_method
             some code
         end
     end
+##Nested attributes
+    - user.children.each do |child|
+        = child.name.label
+        = child.name.text_field
+        = child.delete_checkbox
+        = child.delete_checkbox_label
+
+Or even:
+
+    - user.children.build do |child|
+        = child.name.label
+        = child.name.text_field

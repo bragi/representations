@@ -37,12 +37,12 @@
     <%= task.title.text_field%>
     <br/>
   <% end%>
-  <% user.tasks.new_instance do |task|%>
+  <% user.tasks.build do |task|%>
     <%= task.label("Task's title for first new task")%>
     <%= task.title.text_field%>
     <br/>
   <% end%>
-  <% user.tasks.new_instance do |task|%>
+  <% user.tasks.build do |task|%>
     <%= task.label("Task's title for second new task")%>
     <%= task.title.text_field%>
     <br/>

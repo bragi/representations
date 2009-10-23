@@ -3,8 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe User do
   before(:each) do
     @valid_attributes = {
-      :login => "value for login",
-      :email => "value for email"
+      :nick => "value for nick"
     }
   end
 

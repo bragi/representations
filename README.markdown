@@ -59,3 +59,7 @@ Or even:
     - user.children.build do |child|
         = child.name.label
         = child.name.text_field
+### Automatic wrapping
+Create file config/initializers/representations.rb
+    Representations.enable_automatic_wrapping = true
+if you want Representations to automatically wrap variables from the controller

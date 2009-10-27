@@ -1,31 +1,20 @@
 module Representations
-  #Enables automatic wrapping
-  #TODO should be disabled until module unloading will be fixed
+  #Checks if automatic wrapping should be enabled (defaults to false)
+  def self.enable_automatic_wrapping
+    @enable_automatic_wrapping || false
+  end
+  #User can set this value to true to enable automatic wrapping
   def self.enable_automatic_wrapping=(value)
-    if value
-      ActionView::Base.class_eval do 
-       def instance_variable_set_with_r(symbol, obj)
-         load ActiveSupport::Dependencies.search_for_file('representations.rb')
-         obj = Representations.representation_for(obj, self, symbol.to_s[1..-1]) if obj.is_a?(ActiveRecord::Base)
-         instance_variable_set_without_r(symbol, obj) #call to the original method
-       end
-       self.alias_method_chain :instance_variable_set, :r
-     end
-    end
+    @enable_automatic_wrapping = value
   end
   #Creates Representation for object passed as a paremeter, type of the representation
   #depends on the type of the object
   def representation_for(object, template, name=nil, parent=nil)
-    representation_class =
-      begin
-        if object.is_a?(ActiveRecord::Base)
-          ActiveRecordRepresentation
-        else
-          "Representations::#{object.class.to_s.demodulize}Representation".constantize 
-        end
-      rescue 
-        AssociationsRepresentation if object.ancestors.include?(ActiveRecord::Associations) rescue DefaultRepresentation
-      end
+    representation_class = if object.is_a?(ActiveRecord::Base)
+      ActiveRecordRepresentation
+    else
+      "Representations::#{object.class.to_s.demodulize}Representation".constantize rescue DefaultRepresentation
+    end
     representation_class.new(object, template, name, parent)
   end
 
@@ -90,7 +79,7 @@ module Representations
       name = []
       prev = nil
       tree.each do |elem| 
-        if elem[1] == DefaultRepresentation || elem[1] == TimeWithZoneRepresentation || prev == AssociationsRepresentation
+        if elem[1] == DefaultRepresentation || elem[1] == TimeWithZoneRepresentation || prev == ArrayRepresentation
           name.push "[" + elem[0] + "]"
         else
           name.push "[" + elem[0] + "_attributes]"
@@ -228,7 +217,7 @@ module Representations
     end
   end
   #Representation for Collections
-  class AssociationsRepresentation < Representation
+  class ArrayRepresentation < ActiveRecordRepresentation
     #initilize @num variable
     def initialize(object, template, name, parent)
       super
@@ -242,9 +231,9 @@ module Representations
       end
     end
     #Creates new object in the collection and input fields for it defined in the passed block 
-    def build
+    def new_instance
       new_object = @value.build 
-      representation_object = AssociationsRepresentation::NewRecordRepresentation.new(new_object, @template, 'new_' + num.to_s, self)
+      representation_object = ArrayRepresentation::NewRecordRepresentation.new(new_object, @template, 'new_' + num.to_s, self)
       yield representation_object
     end
     private 
@@ -254,16 +243,17 @@ module Representations
        @num += 1 
     end
     #Representation that wraps newly created ActiveRecord::Base that will be added to some collection
-    class NewRecordRepresentation < Representation
+    class NewRecordRepresentation < DefaultRepresentation
       #Creates new method which wraps call for ActionRecord
       #New method returns Representation which represents datatype in the appropriate column
       def method_missing(method_name_symbol, *args, &block)
         method_name = method_name_symbol.to_s
-        representation_class = case @value.class.columns_hash[method_name].type
+        representation_class = "NilClassRepresentation"
+        case @value.class.columns_hash[method_name].type
         when :string
-          "DefaultRepresentation"
-        when :date
-          "TimeWithZoneRepresentation"
+          representation_class = "DefaultRepresentation"
+        when :datetime
+          representation_class = "TimeWithZoneRepresentation"
         end
         method = <<-EOF
           def #{method_name}(*args, &block)
@@ -272,7 +262,7 @@ module Representations
              @__#{method_name} if block.nil?
           end
         EOF
-        ::Representations::AssociationsRepresentation::NewRecordRepresentation.class_eval(method, __FILE__, __LINE__)
+        ::Representations::ArrayRepresentation::NewRecordRepresentation.class_eval(method, __FILE__, __LINE__)
         self.__send__(method_name_symbol, &block)
       end
     end

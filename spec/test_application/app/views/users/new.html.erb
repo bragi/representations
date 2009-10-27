@@ -15,6 +15,7 @@
 
 
 
+
 <!--
 <% form_for @user do |user_form| %>
   <% @user.tasks.each do |task| %>
@@ -37,12 +38,12 @@
     <%= task.title.text_field%>
     <br/>
   <% end%>
-  <% user.tasks.build do |task|%>
+  <% user.tasks.new_instance do |task|%>
     <%= task.label("Task's title for first new task")%>
     <%= task.title.text_field%>
     <br/>
   <% end%>
-  <% user.tasks.build do |task|%>
+  <% user.tasks.new_instance do |task|%>
     <%= task.label("Task's title for second new task")%>
     <%= task.title.text_field%>
     <br/>

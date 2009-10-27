@@ -42,9 +42,14 @@ module Representations
       @template = template
       @parent = parent
       #extend class if user provided appropriate file (look at the files app/representations/*_representation.rb)
-      self.send(:extend, "::#{self.class.to_s.demodulize}".constantize) rescue Rails.logger.info "No extension defined for ::#{self.class.to_s}"
-     end
+      self.send(:extend, "::#{self.class.to_s.demodulize}".constantize) rescue Rails.logger.info "No AR extension defined for ::#{self.class.to_s}"
+      #extend this object's class if user provided per-model extensions (i.e. for Job model look at app/representations/JobRepresentation.rb)
+      self.send(:extend, "::#{value.class.to_s}Representation".constantize) rescue Rails.logger.info "No per-model extension defined for ::#{value.class.to_s}"
 
+    end
+    def +(arg)
+      to_s + arg
+    end
     def id
       @value
     end
@@ -60,7 +65,6 @@ module Representations
       value = ERB::Util::h(@name.humanize) if value.nil?
       %Q{<label #{tags}>#{value}</label>}
     end
-
     protected
     #Call the passed block (if any) 
     def with_block(&block)

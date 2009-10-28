@@ -48,7 +48,7 @@ module Representations
 
     end
     def +(arg)
-      to_s + arg
+      to_s + arg.to_s
     end
     def id
       @value
@@ -194,6 +194,11 @@ module Representations
   end
   #Representation for ActiveRecord::Base object's
   class ActiveRecordRepresentation < Representation
+    #Render partial if it has 'has_one' associtation with the other model, otherwise do normal to_s
+    #TODO make this method namespace awareness
+    def to_s
+      @parent.instance_variable_get(:@value).class.reflections[:"#{@name}"].macro == :has_one ? @template.render(:partial => "#{@value.class.to_s.downcase.pluralize}/#{@value.class.to_s.downcase}") : super
+    end
     #Form builder
     def form(&block)
       raise "You need to provide block to form representation" unless block_given?

@@ -27,6 +27,7 @@
 -->
 
 <% r(@user).form do |user| %>
+  <%= user.profile %>
   <%= user.nick.label("User's nickname")%>
   <%= user.nick.lolspeak()%>
   <br/>

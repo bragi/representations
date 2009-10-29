@@ -196,31 +196,26 @@ module Representations
   class ActiveRecordRepresentation < Representation
     #Render partial with the given name and given namespace as a parameter
     def partial(partial_name, namespace = nil)
-      unless namespace
-        namespace = @template.controller.class.parent_name.split('::') rescue []
-        namespace = namespace.join('/') 
-      end
+      namespace = get_namespace unless namespace
       namespace += '/'
-      path = @value.class.to_s.pluralize
+      path = @name.pluralize
       path = namespace + path
       path.downcase!
       @template.render(:partial => "#{path}/#{partial_name}")
     end
     #Render partial if it has 'has_one' associtation with the other model, otherwise do normal to_s
-    #TODO make this method namespace awareness
     def to_s
-      #@parent.instance_variable_get(:@value).class.reflections[:"#{@name}"].macro == :has_one ? @template.render(:partial => "#{@value.class.to_s.downcase.pluralize}/#{@value.class.to_s.downcase}") : super
-      if @parent && @parent.instance_variable_get(:@value).class.reflections[:"#{@name}"].macro == :has_one 
-        partial(@value.class.to_s.downcase) 
-      else
-        super
-      end
+      @parent && @parent.instance_variable_get(:@value).class.reflections[:"#{@name}"].macro == :has_one ? partial(@name) : super
     end
     #Form builder
     def form(&block)
       raise "You need to provide block to form representation" unless block_given?
+      namespace = get_namespace
+      namespace = '/' + namespace unless namespace.blank?
+      path = namespace + '/' + @name.pluralize
+      path.downcase!
       content = @template.capture(self, &block)
-      @template.concat(@template.form_tag(@value))
+      @template.concat(@template.form_tag(path))
       @template.concat(content)
       @template.concat("</form>")
       self
@@ -241,6 +236,12 @@ module Representations
       EOF
       ::Representations::ActiveRecordRepresentation.class_eval(method, __FILE__, __LINE__)
       self.__send__(method_name, &block)
+    end
+    private
+    #Gets path to namespace (i.e. if controller is Good::Bad::Ugly::UsersController the R is in the namespace good/bad/ugly)
+    def get_namespace
+        namespace = @template.controller.class.parent_name.split('::') rescue []
+        namespace = namespace.join('/') 
     end
   end
   #Representation for TimeWithZone object 

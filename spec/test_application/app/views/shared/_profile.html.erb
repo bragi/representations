@@ -1,0 +1,24 @@
+<%form_for(@profile) do |t|%>
+  <%=t.label "For user:"%>
+  <%=collection_select(:profile, :user_id, User.all, :id, :nick) %>
+  <br />
+  <%=t.label "Name:"%>
+  <%=t.text_field :name %>
+  <br />
+  <%=t.label "Surame:"%>
+  <%=t.text_field :surname %>
+  <br />
+  <%=t.label "Eye color"%>
+  <br />
+  <%=radio_button :profile, :eye_color, "blue" %>  Blue
+  <br />
+  <%=radio_button :profile, :eye_color, "green" %>  Green
+  <br />
+  <%=radio_button :profile, :eye_color, "other" %>  Other
+  <br />
+  <%=t.label "Characteristic:"%>
+  <%=t.text_area :characteristics %>
+  <br />
+  <%=t.submit "submit" %>
+<%end%>
+<%= link_to "resign", root_path %>

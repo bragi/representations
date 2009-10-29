@@ -1,8 +1,12 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
   def r(model)
-    raise 'Automatic wrapping have already been activated' if Representations.automatic_wrapping 
-    r = Representations.representation_for(model, self, find_variables_name(model))
+    if model.class == Representations::ActiveRecordRepresentation
+      Rails.logger.info 'object is already wrapped in Representation'
+      r = model
+    else
+      r = Representations.representation_for(model, self, find_variables_name(model)) 
+    end
     yield r if block_given?
     r
   end

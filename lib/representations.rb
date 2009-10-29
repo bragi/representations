@@ -1,8 +1,4 @@
 module Representations
-  @@automatic_wrapping = false
-  def self.automatic_wrapping
-    @automatic_wrapping
-  end
   #Enables automatic wrapping
   #Currently there's no way of deactivating it
   def self.enable_automatic_wrapping=(value)
@@ -15,7 +11,6 @@ module Representations
        end
        self.alias_method_chain :instance_variable_set, :r
      end
-     @automatic_wrapping = true
     end
   end
   #Creates Representation for object passed as a paremeter, type of the representation

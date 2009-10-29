@@ -194,10 +194,27 @@ module Representations
   end
   #Representation for ActiveRecord::Base object's
   class ActiveRecordRepresentation < Representation
+    #Render partial with the given name and given namespace as a parameter
+    def partial(partial_name, namespace = nil)
+      unless namespace
+        namespace = @template.controller.class.parent_name.split('::')
+        namespace = namespace.join('/')
+      end
+      namespace += '/'
+      path = @value.class.to_s.pluralize
+      path = namespace + path
+      path.downcase!
+      @template.render(:partial => "#{path}/#{partial_name}")
+    end
     #Render partial if it has 'has_one' associtation with the other model, otherwise do normal to_s
     #TODO make this method namespace awareness
     def to_s
-      @parent.instance_variable_get(:@value).class.reflections[:"#{@name}"].macro == :has_one ? @template.render(:partial => "#{@value.class.to_s.downcase.pluralize}/#{@value.class.to_s.downcase}") : super
+      #@parent.instance_variable_get(:@value).class.reflections[:"#{@name}"].macro == :has_one ? @template.render(:partial => "#{@value.class.to_s.downcase.pluralize}/#{@value.class.to_s.downcase}") : super
+      if @parent && @parent.instance_variable_get(:@value).class.reflections[:"#{@name}"].macro == :has_one 
+        partial(@value.class.to_s.downcase) 
+      else
+        super
+      end
     end
     #Form builder
     def form(&block)
@@ -260,7 +277,7 @@ module Representations
     attr_reader :num
     #Used for generating unique @name for ArrayRepresentation::NewRecordRepresentation
     def num
-       @num += 1 
+      @num += 1 
     end
     #Representation that wraps newly created ActiveRecord::Base that will be added to some collection
     class NewRecordRepresentation < Representation
@@ -269,11 +286,11 @@ module Representations
       def method_missing(method_name_symbol, *args, &block)
         method_name = method_name_symbol.to_s
         representation_class = case @value.class.columns_hash[method_name].type
-        when :string
-          "DefaultRepresentation"
-        when :date
-          "TimeWithZoneRepresentation"
-        end
+                               when :string
+                                 "DefaultRepresentation"
+                               when :date
+                                 "TimeWithZoneRepresentation"
+                               end
         method = <<-EOF
           def #{method_name}(*args, &block)
              @__#{method_name} ||= #{representation_class}.new(@value.#{method_name}, @template, "#{method_name}", self)

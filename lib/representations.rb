@@ -1,6 +1,10 @@
 module Representations
+  @@automatic_wrapping = false
+  def self.automatic_wrapping
+    @automatic_wrapping
+  end
   #Enables automatic wrapping
-  #TODO should be disabled until module unloading will be fixed
+  #Currently there's no way of deactivating it
   def self.enable_automatic_wrapping=(value)
     if value
       ActionView::Base.class_eval do 
@@ -11,6 +15,7 @@ module Representations
        end
        self.alias_method_chain :instance_variable_set, :r
      end
+     @automatic_wrapping = true
     end
   end
   #Creates Representation for object passed as a paremeter, type of the representation
@@ -42,9 +47,9 @@ module Representations
       @template = template
       @parent = parent
       #extend class if user provided appropriate file (look at the files app/representations/*_representation.rb)
-      self.send(:extend, "::#{self.class.to_s.demodulize}".constantize) rescue Rails.logger.info "No AR extension defined for ::#{self.class.to_s}"
+      self.send(:extend, "::#{self.class.to_s.demodulize}".constantize) rescue Rails.logger.info "No AR extension defined for #{self.class.to_s}"
       #extend this object's class if user provided per-model extensions (i.e. for Job model look at app/representations/JobRepresentation.rb)
-      self.send(:extend, "::#{value.class.to_s}Representation".constantize) rescue Rails.logger.info "No per-model extension defined for ::#{value.class.to_s}"
+      self.send(:extend, "::#{value.class.to_s}Representation".constantize) rescue Rails.logger.info "No per-model extension defined for #{value.class.to_s}"
 
     end
     def +(arg)
@@ -197,8 +202,8 @@ module Representations
     #Render partial with the given name and given namespace as a parameter
     def partial(partial_name, namespace = nil)
       unless namespace
-        namespace = @template.controller.class.parent_name.split('::')
-        namespace = namespace.join('/')
+        namespace = @template.controller.class.parent_name.split('::') rescue []
+        namespace = namespace.join('/') 
       end
       namespace += '/'
       path = @value.class.to_s.pluralize

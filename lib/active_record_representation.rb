@@ -52,41 +52,30 @@ module Representations
         namespace = @template.controller.class.parent_name.split('::') rescue []
         namespace = namespace.join('/') 
     end
-    private
     #Wraps ActiveRecord::Base objects in the forms. This object will not create NilClassR for nil objects 
     #instead it will wrap in R depending on the datatype in the table
     class ActiveRecordForFormRepresentation < ActiveRecordRepresentation
-      #Creates Representation for object passed as a paremeter, type of the representation
-      #depends on the type of the object
-      #It differs from Representations.representation_for that it will not wrap NilClass objects in the NilClassRepresentations, instead
-      #it will wrap it in R depending on the datatype in the table
-      def self.representation_for(object, template, name, parent=nil)
-        representation_class = 
-        begin
-          if object.is_a?(ActiveRecord::Base)
-            ActiveRecordRepresentation::ActiveRecordForFormRepresentation
-          else
-            "Representations::#{object.class.to_s.demodulize}Representation".constantize 
-          end
-        rescue 
-          AssociationsRepresentation if object.ancestors.include?(ActiveRecord::Associations) rescue DefaultRepresentation
-        end
-        #if wrapping object is nil do NOT wrap it in the NilClassRepresentation
-        if representation_class == NilClassRepresentation 
-          representation_class = case parent.instance_variable_get(:@value).class.columns_hash[name].type
-                                 when :string
-                                   DefaultRepresentation
-                                 when :date
-                                   TimeWithZoneRepresentation
-                                 end
-        end
-        representation_class.new(object, template, name, parent)
-      end
-      #TODO merge self.representation_for with this method
       def method_missing(method_name, *args, &block)
         method = <<-EOF
             def #{method_name}(*args, &block)
-              @__#{method_name} ||= Representations::ActiveRecordRepresentation::ActiveRecordForFormRepresentation.representation_for(@value.#{method_name}, @template, "#{method_name}", self)
+              representation_class = if @value.#{method_name}.is_a?(ActiveRecord::Base)
+                  Representations::ActiveRecordRepresentation::ActiveRecordForFormRepresentation
+                elsif @value.#{method_name}.respond_to?(:ancestors) && @value.#{method_name}.ancestors.include?(ActiveRecord::Associations)
+                  Representations::AssociationsRepresentation
+                else
+                  case @value.class.columns_hash["#{method_name}"].type
+                                 when :string
+                                   Representations::DefaultRepresentation
+                                 when :text
+                                   Representations::DefaultRepresentation
+                                 when :date 
+                                   Representations::TimeWithZoneRepresentation
+                                 when :datetime 
+                                   Representations::TimeWithZoneRepresentation
+                                 end
+                end
+
+              @__#{method_name} ||= representation_class.new(@value.#{method_name}, @template, "#{method_name}", self)
               @__#{method_name}.with_block(&block)
               @__#{method_name} if block.nil?
             end

@@ -82,6 +82,7 @@ module Representations
         end
         representation_class.new(object, template, name, parent)
       end
+      #TODO merge self.representation_for with this method
       def method_missing(method_name, *args, &block)
         method = <<-EOF
             def #{method_name}(*args, &block)

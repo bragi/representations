@@ -1,4 +1,3 @@
-require 'representation'
 module Representations
   #Representation for objects which are nil
   class NilClassRepresentation < Representation
@@ -14,8 +13,6 @@ module Representations
     #Returns blank string
     def to_s
       return ''
-    end
-    def label
     end
   end
 end

@@ -1,6 +1,7 @@
 <p>New user</p>
 <% @user = User.new %>
 <% @user.nick = "J-23" %>
+<% @user.nick = nil %>
 <% @user.created_at = Time.now %>
 <% task0 = Task.new ; task0.id = 0 ; task0.title = "task 0" %>
 <% task1 = Task.new ; task1.id = 1 ; task1.title = "task 1" %>
@@ -28,7 +29,9 @@
 
 <% r(@user).form do |user| %>
   <%= user.profile %>
+  <br/>
   <%= user.nick.label("User's nickname")%>
+  <%= user.nick.text_field()%>
   <%#<%= user.nick.lolspeak()%>%>
   <br/>
   <%= user.tasks.label("User's tasks")%>
@@ -48,7 +51,6 @@
     <%= task.title.text_field%>
     <br/>
   <% end%>
-  <%= user.nick.password_field(:class => "password_field_class")%>
   <br/>
   <%= user.nick.label("User's name")%>
   <%= user.profile.name.text_field(:class => "text_field_class")%>

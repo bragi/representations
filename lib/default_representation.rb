@@ -1,4 +1,3 @@
-require 'representation'
 module Representations
   class DefaultRepresentation < Representation
     #not tested in the view

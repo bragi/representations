@@ -1,4 +1,3 @@
-require 'representations'
 module Representations
   class Representation 
 
@@ -11,8 +10,13 @@ module Representations
       @name = name
       @template = template
       @parent = parent
+
+      Representations::DefaultRepresentation.send(:include, "::DefaultRepresentation".constantize) rescue Rails.logger.info "No AR extension defined for DefaultRepresentation"
+      puts self.class.to_s.demodulize
       #TODO broken, have to find another way than the one depending on the const missing loading by rails
       #extend class if user provided appropriate file (look at the files app/representations/*_representation.rb)
+      #first check if file exists in app/representations
+      #if extension_
       #self.send(:extend, "::#{self.class.to_s.demodulize}".constantize) rescue Rails.logger.info "No AR extension defined for #{self.class.to_s}"
       #extend this object's class if user provided per-model extensions (i.e. for Job model look at app/representations/JobRepresentation.rb)
       #self.send(:extend, "::#{value.class.to_s}Representation".constantize) rescue Rails.logger.info "No per-model extension defined for #{value.class.to_s}"

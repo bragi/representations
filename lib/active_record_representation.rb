@@ -1,4 +1,4 @@
-require 'representations'
+#require 'representations'
 module Representations
   #Representation for ActiveRecord::Base objects
   class ActiveRecordRepresentation < Representation
@@ -22,7 +22,8 @@ module Representations
       namespace = '/' + namespace unless namespace.blank?
       path = namespace + '/' + @name.pluralize
       path.downcase!
-      content = @template.capture(self, &block)
+      r_for_form = ActiveRecordForFormRepresentation.new(@value, @template, @name, @parent)
+      content = @template.capture(r_for_form, &block)
       @template.concat(@template.form_tag(path))
       @template.concat(content)
       @template.concat("</form>")
@@ -50,6 +51,48 @@ module Representations
     def get_namespace
         namespace = @template.controller.class.parent_name.split('::') rescue []
         namespace = namespace.join('/') 
+    end
+    private
+    #Wraps ActiveRecord::Base objects in the forms. This object will not create NilClassR for nil objects 
+    #instead it will wrap in R depending on the datatype in the table
+    class ActiveRecordForFormRepresentation < ActiveRecordRepresentation
+      #Creates Representation for object passed as a paremeter, type of the representation
+      #depends on the type of the object
+      #It differs from Representations.representation_for that it will not wrap NilClass objects in the NilClassRepresentations, instead
+      #it will wrap it in R depending on the datatype in the table
+      def self.representation_for(object, template, name, parent=nil)
+        representation_class = 
+        begin
+          if object.is_a?(ActiveRecord::Base)
+            ActiveRecordRepresentation::ActiveRecordForFormRepresentation
+          else
+            "Representations::#{object.class.to_s.demodulize}Representation".constantize 
+          end
+        rescue 
+          AssociationsRepresentation if object.ancestors.include?(ActiveRecord::Associations) rescue DefaultRepresentation
+        end
+        #if wrapping object is nil do NOT wrap it in the NilClassRepresentation
+        if representation_class == NilClassRepresentation 
+          representation_class = case parent.instance_variable_get(:@value).class.columns_hash[name].type
+                                 when :string
+                                   DefaultRepresentation
+                                 when :date
+                                   TimeWithZoneRepresentation
+                                 end
+        end
+        representation_class.new(object, template, name, parent)
+      end
+      def method_missing(method_name, *args, &block)
+        method = <<-EOF
+            def #{method_name}(*args, &block)
+              @__#{method_name} ||= Representations::ActiveRecordRepresentation::ActiveRecordForFormRepresentation.representation_for(@value.#{method_name}, @template, "#{method_name}", self)
+              @__#{method_name}.with_block(&block)
+              @__#{method_name} if block.nil?
+            end
+        EOF
+        ::Representations::ActiveRecordRepresentation::ActiveRecordForFormRepresentation.class_eval(method, __FILE__, __LINE__)
+        self.__send__(method_name, &block)
+      end
     end
   end
 end

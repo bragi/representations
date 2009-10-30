@@ -1,4 +1,3 @@
-require 'representation'
 module Representations
   #Representation for Collections
   class AssociationsRepresentation < Representation

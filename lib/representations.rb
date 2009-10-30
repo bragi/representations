@@ -1,12 +1,11 @@
-require 'representation'
-require 'default_representation'
-require 'associations_representation'
-require 'active_record_representation'
-#require 'active_record_for_form_representation'
-require 'nil_class_representation'
+load 'representation.rb'
+load 'default_representation.rb'
+load 'associations_representation.rb'
+load 'active_record_representation.rb'
+load 'nil_class_representation.rb'
 module Representations
   #Enables automatic wrapping
-  #Currently there's no way of deactivating it
+  #Currently there's no way of disabling it
   def self.enable_automatic_wrapping=(value)
     if value
       ActionView::Base.class_eval do 
@@ -32,15 +31,6 @@ module Representations
       rescue 
         AssociationsRepresentation if object.ancestors.include?(ActiveRecord::Associations) rescue DefaultRepresentation
       end
-    #if wrapping a new record wrap to something else than NilClassRepresentation
-    #if representation_class == NilClassRepresentation && parent.instance_variable_get(:@value).new_record?
-        #representation_class = case parent.instance_variable_get(:@value).class.columns_hash[name].type
-                               #when :string
-                                 #DefaultRepresentation
-                               #when :date
-                                 #TimeWithZoneRepresentation
-                               #end
-    #end
     representation_class.new(object, template, name, parent)
   end
 

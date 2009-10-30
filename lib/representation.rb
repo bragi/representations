@@ -11,7 +11,7 @@ module Representations
       @template = template
       @parent = parent
 
-      Representations::DefaultRepresentation.send(:include, "::DefaultRepresentation".constantize) rescue Rails.logger.info "No AR extension defined for DefaultRepresentation"
+      #Representations::DefaultRepresentation.send(:include, "::DefaultRepresentation".constantize) rescue Rails.logger.info "No AR extension defined for DefaultRepresentation"
       puts self.class.to_s.demodulize
       #TODO broken, have to find another way than the one depending on the const missing loading by rails
       #extend class if user provided appropriate file (look at the files app/representations/*_representation.rb)

@@ -1,6 +1,12 @@
 module Representations
   class Representation 
-
+    @@extended = false
+    def self.extended
+      @extended
+    end
+    def self.extended=(value)
+      @extended = value
+    end
     #value - object for which the representation is created 
     #template - template view (needed because some ActionView::Base methods are private)
     #name - the actuall name of the method that was called on the object's parent that is being initialize
@@ -11,16 +17,18 @@ module Representations
       @template = template
       @parent = parent
 
-      #Representations::DefaultRepresentation.send(:include, "::DefaultRepresentation".constantize) rescue Rails.logger.info "No AR extension defined for DefaultRepresentation"
-      puts self.class.to_s.demodulize
-      #TODO broken, have to find another way than the one depending on the const missing loading by rails
       #extend class if user provided appropriate file (look at the files app/representations/*_representation.rb)
       #first check if file exists in app/representations
-      #if extension_
-      #self.send(:extend, "::#{self.class.to_s.demodulize}".constantize) rescue Rails.logger.info "No AR extension defined for #{self.class.to_s}"
-      #extend this object's class if user provided per-model extensions (i.e. for Job model look at app/representations/JobRepresentation.rb)
-      #self.send(:extend, "::#{value.class.to_s}Representation".constantize) rescue Rails.logger.info "No per-model extension defined for #{value.class.to_s}"
-
+      if !@@extended && File.exist?("app/representations/#{send(:class).to_s.demodulize.tableize.singularize}.rb")
+        Rails.logger.info "Extending Representation ::#{self.class.to_s.demodulize}"
+        send(:class).send(:include, "::#{self.class.to_s.demodulize}".constantize)
+        @@extended = true
+      end
+      #extend this object's class if user provided per-model extensions (i.e. for Job model look at app/representations/job_representation.rb)
+      if File.exist?("app/representations/#{value.class.to_s.demodulize.tableize.singularize}_representation.rb")
+        Rails.logger.info "Extending Representation ::#{self.class.to_s.demodulize} for model #{value.class.to_s}"
+        send(:extend, "::#{value.class.to_s}Representation".constantize) 
+      end
     end
     def +(arg)
       to_s + arg.to_s

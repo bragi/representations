@@ -33,7 +33,7 @@
   <%= user.nick.label("User's nickname")%>
   <%= user.nick.text_field()%>
 
-  <%#<%= user.nick.lolspeak()%>%>
+  <%= user.nick.lolspeak()%>
   <br/>
   <%= user.tasks.label("User's tasks")%>
   <br/>
@@ -56,7 +56,7 @@
   <%= user.nick.label("User's name")%>
   <%= user.profile.name.text_field(:class => "text_field_class")%>
   <br/>
-  <%#<%= user.profile.name_with_smile()%>%>
+  <%= user.profile.name_with_smile()%>
   <br/>
   <%= user.created_at.label("User's creation date")%>
   <%= user.created_at.select({}, :class => "select_class")%>

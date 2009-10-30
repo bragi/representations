@@ -19,8 +19,7 @@ Resource representations change syntax to object oriented and model specific."
      "Rakefile",
      "VERSION",
      "init.rb",
-     "lib/representations.rb",
-     "lib/view_helpers.rb",
+     "lib/*",
      "rails/init.rb",
      "representations.gemspec"
   ]

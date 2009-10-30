@@ -2,7 +2,7 @@
 module ApplicationHelper
   def r(model)
     if model.class == Representations::ActiveRecordRepresentation
-      Rails.logger.info 'object is already wrapped in Representation'
+      Rails.logger.info 'Object is already wrapped in Representation'
       r = model
     else
       r = Representations.representation_for(model, self, find_variables_name(model)) 

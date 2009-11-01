@@ -1,1 +1,15 @@
-_task partial
+<% form_for(@task) do |f| %>
+  <%= f.title.label %>
+  <%= f.title.text_field %>
+  <br />
+  <%= f.due_to.label %>
+  <%= f.due_to.select_date %>
+  <br />  
+  <%= f.description.label %>
+  <%= f.description.text_area %>
+  <br />  
+  <%= f.priority.label %>
+  <%= f.priority.text_field %>
+  <br />  
+  <%=f.submit("submit")%>
+<%end%>

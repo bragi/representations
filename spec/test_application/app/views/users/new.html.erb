@@ -1,0 +1,27 @@
+<% r(@user).form do |user| %>
+  <%= user.label "Nick"%>
+  <%= user.nick %>
+  <% user.profile do |f|%>
+    <%= f.name.label%>
+    <%= f.name.text_field %>
+    <br />
+    <%= f.name.label%>
+    <%= f.name.text_field %>
+    <br />
+    <%= f.surname.label%>
+    <%= f.surname.text_field %>
+    <br />
+    <%= f.eye_color.label%>
+    <%= f.eye_color.radio_button('blue') %>
+    <br />
+    <%= f.eye_color.label%>
+    <%= f.eye_color.radio_button('green') %>
+    <br />
+    <%= f.eye_color.label%>
+    <%= f.eye_color.radio_button('other') %>
+    <br />
+    <%= f.characteristics.label%>
+    <%= f.characteristics.text_area %>
+    <br />
+  <%= user.submit(submit) %>
+<%end%>

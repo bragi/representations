@@ -1,5 +1,5 @@
 module ProfileRepresentation
   def name_with_smile
-    name + ' :-)'
+    name + ' :)'
   end
 end

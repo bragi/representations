@@ -11,7 +11,11 @@ module Representations
       ActionView::Base.class_eval do 
        def instance_variable_set_with_r(symbol, obj)
          load ActiveSupport::Dependencies.search_for_file('representations.rb')
-         obj = Representations.representation_for(obj, self, symbol.to_s[1..-1]) if obj.is_a?(ActiveRecord::Base)
+         if obj.is_a?(ActiveRecord::Base)
+           obj = Representations.representation_for(obj, self, symbol.to_s[1..-1]) 
+         elsif obj.class == Array #handle case when controller sends array of AR objects
+           obj.map!{ |o| Representations.representation_for(o, self, symbol.to_s[1..-1]) }
+         end
          instance_variable_set_without_r(symbol, obj) #call to the original method
        end
        self.alias_method_chain :instance_variable_set, :r
@@ -39,7 +43,11 @@ module Representations
   #Representation for TimeWithZone object 
   class TimeWithZoneRepresentation < Representation
     def select(passed_options = {}, html_options = {})
-      options = {:defaults => {:day => @value.day, :month => @value.month, :year => @value.year}}
+      if @value
+        options = {:defaults => {:day => @value.day, :month => @value.month, :year => @value.year}}
+      else
+        options = {:defaults => {:day => Time.now.day, :month => Time.now.month, :year => Time.now.year}}
+      end
       options.merge!(passed_options)
       tree = get_parents_tree
       name = get_html_name_attribute_value(tree)

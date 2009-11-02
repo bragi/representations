@@ -1,9 +1,9 @@
-<% form_for(@task) do |f| %>
+<% @task.form do |f| %>
   <%= f.title.label %>
   <%= f.title.text_field %>
   <br />
   <%= f.due_to.label %>
-  <%= f.due_to.select_date %>
+  <%= f.due_to.select%>
   <br />  
   <%= f.description.label %>
   <%= f.description.text_area %>
@@ -11,5 +11,5 @@
   <%= f.priority.label %>
   <%= f.priority.text_field %>
   <br />  
-  <%=f.submit("submit")%>
+  <%=submit_tag("submit")%>
 <%end%>

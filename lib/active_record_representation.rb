@@ -1,4 +1,3 @@
-#require 'representations'
 module Representations
   #Representation for ActiveRecord::Base objects
   class ActiveRecordRepresentation < Representation
@@ -11,7 +10,7 @@ module Representations
       path.downcase!
       @template.render(:partial => "#{path}/#{partial_name}")
     end
-    #Render partial if it has 'has_one' associtation with the other model, otherwise do normal to_s
+    #Render partial if it has 'has_one' association with the other model, otherwise do normal to_s
     def to_s
       @parent && @parent.instance_variable_get(:@value).class.reflections[:"#{@name}"].macro == :has_one ? partial(@name) : super
     end
@@ -61,20 +60,18 @@ module Representations
               #debugger
               puts 'Method name :' + '#{method_name}'
               representation_class = if @value.respond_to?(:create_#{method_name})
-                  @value.#{method_name} = "#{method_name}".pluralize.constantize.new
+                  @value.#{method_name} = "#{method_name}".classify.constantize.new
                   Representations::ActiveRecordRepresentation::ActiveRecordForFormRepresentation
                 elsif @value.#{method_name}.respond_to?(:ancestors) && @value.#{method_name}.ancestors.include?(ActiveRecord::Associations)
                   Representations::AssociationsRepresentation
                 else
                   case @value.class.columns_hash["#{method_name}"].type
-                                 when :string
-                                   Representations::DefaultRepresentation
-                                 when :text
-                                   Representations::DefaultRepresentation
                                  when :date 
                                    Representations::TimeWithZoneRepresentation
                                  when :datetime 
                                    Representations::TimeWithZoneRepresentation
+                                 else
+                                   Representations::DefaultRepresentation
                                  end
                 end
 

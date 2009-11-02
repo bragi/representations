@@ -15,7 +15,7 @@ module Representations
     def to_s
       @parent && @parent.instance_variable_get(:@value).class.reflections[:"#{@name}"].macro == :has_one ? partial(@name) : super
     end
-    #Form builder
+    #Form tag, namespace depends on the namespace of the controller.
     def form(&block)
       raise "You need to provide block to form representation" unless block_given?
       namespace = get_namespace
@@ -30,7 +30,7 @@ module Representations
       self
     end
     #Forwards ActiveRecord invocation and wraps result in appropriate Representation
-    #Suppose that User extends ActiveRecord::Base :
+    #Suppose that User extends ActiveRecord::Base:
     #ar_user = User.new
     #ar_user.nick = 'foo'
     #user = r(ar_user) #user is now ActiveRecordRepresentation
@@ -58,7 +58,10 @@ module Representations
       def method_missing(method_name, *args, &block)
         method = <<-EOF
             def #{method_name}(*args, &block)
-              representation_class = if @value.#{method_name}.is_a?(ActiveRecord::Base)
+              #debugger
+              puts 'Method name :' + '#{method_name}'
+              representation_class = if @value.respond_to?(:create_#{method_name})
+                  @value.#{method_name} = "#{method_name}".pluralize.constantize.new
                   Representations::ActiveRecordRepresentation::ActiveRecordForFormRepresentation
                 elsif @value.#{method_name}.respond_to?(:ancestors) && @value.#{method_name}.ancestors.include?(ActiveRecord::Associations)
                   Representations::AssociationsRepresentation

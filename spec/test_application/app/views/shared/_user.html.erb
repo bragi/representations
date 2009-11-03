@@ -1,7 +1,7 @@
-<%form_for(@user) do |t|%>
+<%@user.form do |t|%>
   <%=t.label "Name:"%>
-  <%=t.text_field :nick %>
+  <%=t.nick.text_field %>
   <br />
-  <%=t.submit "confirm" %>
+  <%=submit_tag "confirm" %>
 <%end%>
 <%= link_to "resign", root_path %>

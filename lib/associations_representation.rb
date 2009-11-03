@@ -32,10 +32,12 @@ module Representations
       def method_missing(method_name_symbol, *args, &block)
         method_name = method_name_symbol.to_s
         representation_class = case @value.class.columns_hash[method_name].type
-                               when :string
-                                 "DefaultRepresentation"
-                               when :date
-                                 "TimeWithZoneRepresentation"
+                                 when :date 
+                                   Representations::TimeWithZoneRepresentation
+                                 when :datetime 
+                                   Representations::TimeWithZoneRepresentation
+                                 else
+                                   Representations::DefaultRepresentation
                                end
         method = <<-EOF
           def #{method_name}(*args, &block)

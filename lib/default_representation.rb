@@ -51,15 +51,15 @@ module Representations
       tree = get_parents_tree
       id_attr_value = tree.collect{ |x| x[0] }.join('_') + "_#{value}"
       name_attr_value = get_html_name_attribute_value(tree)
-      if @value #if editing existing record
-        options = {:name => name_attr_value, :value=>value, :id=>id_attr_value, :checked=>"#{@value.capitalize==value.capitalize}"}
+      if @value && @value.capitalize==value.capitalize #if editing existing record and values do match
+        options = {:name => name_attr_value, :value=>value, :id=>id_attr_value, :checked=>"true"}
       else
         options = {:name => name_attr_value, :value=>value, :id=>id_attr_value, :checked=>"false"}
       end
       tags = get_tags(html_options, options)
       %Q{<input type="radio" #{tags}/>}
     end
-    #Returns string with html label tag with for attribute set to the radio button of this object
+    #Returns string with html label tag with 'for' attribute set to the radio button of this object
     def radio_button_label(radio_button_value, value = nil, html_options = {})
       tree = get_parents_tree
       for_attr_value = tree.collect{ |x| x[0] }.join('_') + "_#{radio_button_value}"

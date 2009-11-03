@@ -21,8 +21,12 @@ module Representations
       namespace = '/' + namespace unless namespace.blank?
       path = namespace + '/' + @name.pluralize
       path.downcase!
-      r_for_form = ActiveRecordForFormRepresentation.new(@value, @template, @name, @parent)
-      content = @template.capture(r_for_form, &block)
+      if @value.new_record?
+        r_for_form = NewRecordRepresentation.new(@value, @template, @name, @parent)
+        content = @template.capture(r_for_form, &block)
+      else
+        content = @template.capture(self, &block)
+      end
       @template.concat(@template.form_tag(path))
       @template.concat(content)
       @template.concat("</form>")
@@ -51,15 +55,17 @@ module Representations
         namespace = @template.controller.class.parent_name.split('::') rescue []
         namespace = namespace.join('/') 
     end
-    #Wraps ActiveRecord::Base objects in the forms. This object will not create NilClassR for nil objects 
-    #instead it will wrap in R depending on the datatype in the table
-    class ActiveRecordForFormRepresentation < ActiveRecordRepresentation
+    #Wraps new ActiveRecord::Base objects. This object will not create NilClassR for nil objects 
+    #For attr with has_one association it will wrap in ActiveRecordRepresentation::NewRecordRepresentation
+    #For other associations it will wrap in AssociationsRepresentation
+    #For other datatypes it will wrap in R that corresponds to the datatype in the db
+    class NewRecordRepresentation < ActiveRecordRepresentation
       def method_missing(method_name, *args, &block)
         method = <<-EOF
             def #{method_name}(*args, &block)
               representation_class = if @value.class.reflections[:#{method_name}] && @value.class.reflections[:#{method_name}].macro == :has_one
                   @value.#{method_name} = "#{method_name}".classify.constantize.new
-                  Representations::ActiveRecordRepresentation::ActiveRecordForFormRepresentation
+                  Representations::ActiveRecordRepresentation::NewRecordRepresentation
                 elsif @value.#{method_name}.respond_to?(:ancestors) && @value.#{method_name}.ancestors.include?(ActiveRecord::Associations)
                   Representations::AssociationsRepresentation
                 else
@@ -78,7 +84,7 @@ module Representations
               @__#{method_name} if block.nil?
             end
         EOF
-        ::Representations::ActiveRecordRepresentation::ActiveRecordForFormRepresentation.class_eval(method, __FILE__, __LINE__)
+        ::Representations::ActiveRecordRepresentation::NewRecordRepresentation.class_eval(method, __FILE__, __LINE__)
         self.__send__(method_name, &block)
       end
     end

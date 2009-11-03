@@ -1,2 +1,33 @@
-<h3>Edit Users Name:</h3>
-<%= render :partial => 'shared/user' %>
+<h3>Edit User:</h3>
+<% r(@user).form do |user| %>
+  <%= user.label "Nick"%>
+  <%= user.nick.text_field %>
+  <% user.profile do |profile|%>
+    <%= profile.name.label%>
+    <%= profile.name.text_field %>
+    <br />
+    <%= profile.surname.label%>
+    <%= profile.surname.text_field %>
+    <br />
+    <%= profile.eye_color.radio_button_label('blue')%>
+    <%= profile.eye_color.radio_button('blue') %>
+    <br />
+    <%= profile.eye_color.radio_button_label('green', 'Green')%>
+    <%= profile.eye_color.radio_button('green') %>
+    <br />
+    <%= profile.eye_color.radio_button_label('other', 'Different')%>
+    <%= profile.eye_color.radio_button('other') %>
+    <br />
+    <%= profile.characteristics.label%>
+    <%= profile.characteristics.text_area %>
+    <br />
+  <%end%>
+  <% user.tasks.each do |task|%>
+    <%= task.title.text_field %>
+    <%= task.priority.text_field %>
+    <%= task.description.text_field %>
+    <%= task.due_to.select %>
+  <%end%>
+  <%= submit_tag('ok') %>
+<%end%>
+<%= link_to "resign", root_path %>

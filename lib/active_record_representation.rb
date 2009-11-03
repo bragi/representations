@@ -57,9 +57,7 @@ module Representations
       def method_missing(method_name, *args, &block)
         method = <<-EOF
             def #{method_name}(*args, &block)
-              #debugger
-              puts 'Method name :' + '#{method_name}'
-              representation_class = if @value.respond_to?(:create_#{method_name})
+              representation_class = if @value.class.reflections[:#{method_name}] && @value.class.reflections[:#{method_name}].macro == :has_one
                   @value.#{method_name} = "#{method_name}".classify.constantize.new
                   Representations::ActiveRecordRepresentation::ActiveRecordForFormRepresentation
                 elsif @value.#{method_name}.respond_to?(:ancestors) && @value.#{method_name}.ancestors.include?(ActiveRecord::Associations)

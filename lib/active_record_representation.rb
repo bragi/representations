@@ -59,7 +59,7 @@ module Representations
     #For attr with has_one association it will wrap in ActiveRecordRepresentation::NewRecordRepresentation
     #For other associations it will wrap in AssociationsRepresentation
     #For other datatypes it will wrap in R that corresponds to the datatype in the db
-    class NewRecordRepresentation < ActiveRecordRepresentation
+    class NewRecordRepresentation < Representation
       def method_missing(method_name, *args, &block)
         method = <<-EOF
             def #{method_name}(*args, &block)
@@ -71,9 +71,9 @@ module Representations
                 else
                   case @value.class.columns_hash["#{method_name}"].type
                                  when :date 
-                                   Representations::TimeWithZoneRepresentation
+                                   Representations::DateRepresentation
                                  when :datetime 
-                                   Representations::TimeWithZoneRepresentation
+                                   Representations::DateRepresentation
                                  else
                                    Representations::DefaultRepresentation
                                  end

@@ -3,6 +3,7 @@ load 'default_representation.rb'
 load 'associations_representation.rb'
 load 'active_record_representation.rb'
 load 'nil_class_representation.rb'
+load 'date_representation.rb'
 module Representations
   
   #Currently this method is never called but maybe someday it will have to be :-)
@@ -40,18 +41,4 @@ module Representations
 
   module_function :representation_for
 
-  #Representation for TimeWithZone object 
-  class TimeWithZoneRepresentation < Representation
-    def select(passed_options = {}, html_options = {})
-      if @value
-        options = {:defaults => {:day => @value.day, :month => @value.month, :year => @value.year}}
-      else
-        options = {:defaults => {:day => Time.now.day, :month => Time.now.month, :year => Time.now.year}}
-      end
-      options.merge!(passed_options)
-      tree = get_parents_tree
-      name = get_html_name_attribute_value(tree)
-      @template.date_select(name, @name, options, html_options)
-    end
-  end
 end

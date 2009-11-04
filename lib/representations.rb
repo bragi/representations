@@ -4,22 +4,22 @@ load 'associations_representation.rb'
 load 'active_record_representation.rb'
 load 'nil_class_representation.rb'
 module Representations
+  
+  #Currently this method is never called but maybe someday it will have to be :-)
+  #Changes ActionController::PolymorphicRoutes#polymorphic_path so it can handle R
+  def self.eval_polymorphic_routes
+    ActionController::PolymorphicRoutes.class_eval do
+      def polymorphic_path_with_r(object, options = {})
+        object.isa_a?(Representation) ? polymorphic_path_without_r(object.instance_variable_get(:@value), options) : polymorphic_path_without_r(object, options)
+      end
+      alias_method_chain :polymorphic_path, :r
+    end
+  end
   #Enables automatic wrapping
   #Currently there's no way of disabling it
   def self.enable_automatic_wrapping=(value)
     if value
-      ActionView::Base.class_eval do 
-       def instance_variable_set_with_r(symbol, obj)
-         load ActiveSupport::Dependencies.search_for_file('representations.rb')
-         if obj.is_a?(ActiveRecord::Base)
-           obj = Representations.representation_for(obj, self, symbol.to_s[1..-1]) 
-         elsif obj.class == Array #handle case when controller sends array of AR objects
-           obj.map!{|o| Representations.representation_for(o, self, symbol.to_s[1..-1]) if o.is_a?(ActiveRecord::Base)}
-         end
-         instance_variable_set_without_r(symbol, obj) #call to the original method
-       end
-       self.alias_method_chain :instance_variable_set, :r
-     end
+      ActionView::Base.class_eval{ self.alias_method_chain :instance_variable_set, :r }
     end
   end
   #Creates Representation for object passed as a paremeter, type of the representation

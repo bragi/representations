@@ -29,6 +29,7 @@ When /^I follow "([^\"]*)" within "([^\"]*)"$/ do |link, parent|
 end
 
 When /^I fill in "([^\"]*)" with "([^\"]*)"$/ do |field, value|
+  puts response.body if field == 'user[nick]'
   fill_in(field, :with => value)
 end
 

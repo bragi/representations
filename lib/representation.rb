@@ -1,5 +1,5 @@
 module Representations
-  class Representation 
+  class Representation
     #value - object for which the representation is created 
     #template - template view (needed because some ActionView::Base methods are private)
     #name - the actuall name of the method that was called on the object's parent that is being initialize

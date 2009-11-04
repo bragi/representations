@@ -78,7 +78,6 @@ module Representations
                                    Representations::DefaultRepresentation
                                  end
                 end
-
               @__#{method_name} ||= representation_class.new(@value.#{method_name}, @template, "#{method_name}", self)
               @__#{method_name}.with_block(&block)
               @__#{method_name} if block.nil?

@@ -11,6 +11,7 @@ module NavigationHelpers
     when /the home\s?page/
       '/'
     when /the new user page/
+      #puts new_user_path
       new_user_path
     when /the users page/
       users_path

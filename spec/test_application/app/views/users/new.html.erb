@@ -1,7 +1,10 @@
 <h3>Create new User:</h3>
-<% r(@user).form do |user| %>
-  <%= user.label "Nick"%>
+<% @user.form do |user| %>
+  <%= user.nick.instance_variable_get(:@value).class.to_s %>
+  <%= user.nick.class.to_s %>
   <%= user.nick.text_field %>
+  <%= user.nick.label "Nick"%>
+  <%= user.class.to_s %>
   <% user.profile do |profile|%>
     <%= profile.name.label%>
     <%= profile.name.text_field %>

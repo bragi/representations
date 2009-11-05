@@ -7,17 +7,20 @@ module Representations
       names.pop
       if @value
         options = {:defaults => {:day => @value.day, :month => @value.month, :year => @value.year}}
-        #TODO now POSTing form is broken value is unknown attr
+        #TODO now POSTing form is broken - value is unknown attr
         names << '[value]' #date_select helper will want to access the object
       else
         options = {:defaults => {:day => Time.now.day, :month => Time.now.month, :year => Time.now.year}}
       end
       options.merge!(passed_options)
+      InstanceTag.new(object_name, method, self, options.delete(:object)).to_date_select_tag(options, html_options)
       @template.date_select(names, @name, options, html_options)
     end
   end
   #Something like alias
   class TimeWithZoneRepresentation < DateRepresentation
+  end
+  class DateTimeRepresentation < DateRepresentation
   end
 end
 

@@ -49,16 +49,3 @@ Spec::Runner.configure do |config|
   #
   # For more information take a look at Spec::Runner::Configuration and Spec::Runner
 end
-
-# Sets up the Rails environment for Cucumber
-require ‘cucumber/rails/world’
-Cucumber::Rails.use_transactional_fixtures
-
-# Add webrat
-require "webrat"
-Webrat.configure do |config|
-  config.mode = :rails
-end
-
-# Comment out the next line if you’re not using RSpec’s matchers (should / should_not) in your steps.
-require ‘cucumber/rails/rspec’

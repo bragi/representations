@@ -6,9 +6,7 @@ describe Representations::ActiveRecordRepresentation do
     profile = stub_model(Profile, {:name => "some name"})
     user = stub_model(User, {:profile => profile})
     user = Representations::representation_for(user, nil, 'user')
-    user.profile do |p|
-      p.name.text_field.should == %Q{<input type="text" name="user[profile][name]" value="some name" id="name"/>}
-    end
+    user.profile.name.text_field.should == %Q{<input type="text" id="user_profile_name" name="user[profile_attributes][name]" value="some name" />}
   end
   it "when a method with the same name as associated object is called with a block and this object is nil it should do nothing" do
     user = stub_model(User, {:profile => nil})

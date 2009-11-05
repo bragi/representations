@@ -33,12 +33,12 @@ end
 require 'spec/rake/spectask'
 Spec::Rake::SpecTask.new(:spec) do |spec|
   spec.libs << 'lib' << 'spec'
-  spec.spec_files = FileList['spec/test_application/spec/helpers/*_spec.rb']
+  spec.spec_files = FileList['spec/test_application/spec/representations/*_spec.rb']
 end
 
 Spec::Rake::SpecTask.new(:rcov) do |spec|
   spec.libs << 'lib' << 'spec'
-  spec.pattern = 'spec/test_application/spec/helpers/*_spec.rb'
+  spec.pattern = 'spec/test_application/spec/representations/*_spec.rb'
   spec.rcov = true
 end
 

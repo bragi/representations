@@ -1,5 +1,5 @@
 module DefaultRepresentation
     def lolspeak
-        puts @name
+        puts 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!'
     end
 end

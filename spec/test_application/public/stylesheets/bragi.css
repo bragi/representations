@@ -1,0 +1,21 @@
+* {
+    margin:0;
+    padding:0;
+}
+
+#header {
+    min-width:600px;
+    margin:auto 30px;
+    background-color:green;
+    height:40px;
+    font-size:30px;
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+}
+#main {
+    padding-top:20px;
+    padding-bottom:20px;
+    min-width:600px;
+    margin:auto 30px;
+
+}
+A:link {color: blue}

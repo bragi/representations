@@ -1,0 +1,6 @@
+<%#<%= @user.partial(:partial_name)%>%>
+<% @user.form do |user| %>
+  <%= user.nick %>
+  <%= user.nick.text_field %>
+  <%= submit_tag('Ok') %>
+<% end%>

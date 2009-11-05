@@ -1,17 +1,7 @@
-<h3>Create new User:</h3>
-<% @user.form do |user| %>
-  <%= 'user.class ' + user.class.to_s %>
-    <br />
-  <%= 'user.value.class ' + user.instance_variable_get(:@value).class.to_s %>
-    <br />
-  <%= 'user.nick.class ' + user.nick.class.to_s %>
-    <br />
-  <%= 'user.class ' + user.class.to_s %>
-    <br />
-  <%= 'user.nick.value.class ' + user.nick.instance_variable_get(:@value).class.to_s %>
-    <br />
+<h3>Edit User:</h3>
+<% r(@user).form do |user| %>
+  <%= user.label "Nick"%>
   <%= user.nick.text_field %>
-  <%= user.nick.label "Nick"%>
   <% user.profile do |profile|%>
     <%= profile.name.label%>
     <%= profile.name.text_field %>
@@ -32,7 +22,7 @@
     <%= profile.characteristics.text_area %>
     <br />
   <%end%>
-  <% user.tasks.build do |task|%>
+  <% user.tasks.each do |task|%>
     <%= task.title.text_field %>
     <%= task.priority.text_field %>
     <%= task.description.text_field %>
@@ -41,4 +31,3 @@
   <%= submit_tag('ok') %>
 <%end%>
 <%= link_to "resign", root_path %>
-

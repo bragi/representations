@@ -12,14 +12,14 @@ module Representations
 
       #extend class if user provided appropriate file (look at the files app/representations/*_representation.rb)
       #first check if file exists in app/representations
-      file_name = "app/representations/#{send(:class).to_s.demodulize.tableize.singularize}.rb"
+      file_name = "#{RAILS_ROOT}/app/representations/#{send(:class).to_s.demodulize.tableize.singularize}.rb"
       if File.exist?(file_name)
         ActiveSupport::Dependencies.require_or_load(file_name)
         Rails.logger.info "Extending Representation ::#{self.class.to_s.demodulize}"
-        send(:class).send(:include, "::#{self.class.to_s.demodulize}".constantize)
+        self.class.send(:include, "::#{self.class.to_s.demodulize}".constantize)
       end
       #extend this object's class if user provided per-model extensions (i.e. for Job model look at app/representations/job_representation.rb)
-      file_name = "app/representations/#{value.class.to_s.demodulize.tableize.singularize}_representation.rb"
+      file_name = "#{RAILS_ROOT}/app/representations/#{value.class.to_s.demodulize.tableize.singularize}_representation.rb"
       if File.exist?(file_name)
         ActiveSupport::Dependencies.require_or_load(file_name)
         Rails.logger.info "Extending Representation ::#{self.class.to_s.demodulize} for model #{value.class.to_s}"

@@ -22,12 +22,15 @@ module Representations
       path = namespace + '/' + @name.pluralize
       path.downcase!
       if @value.new_record?
+        #path += 
         r_for_form = NewRecordRepresentation.new(@value, @template, @name, @parent)
         content = @template.capture(r_for_form, &block)
+        @template.concat(@template.form_tag(path, :method => "post"))
       else
         content = @template.capture(self, &block)
+        path += '/' + "#{@value.id}"
+        @template.concat(@template.form_tag(path, :method => "put"))
       end
-      @template.concat(@template.form_tag(path))
       @template.concat(content)
       @template.concat("</form>")
       self

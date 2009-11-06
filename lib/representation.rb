@@ -30,7 +30,7 @@ module Representations
       to_s + arg.to_s
     end
     def id
-      @value
+      @value.id
     end
     #returns escaped string from the object's to_s method
     def to_s

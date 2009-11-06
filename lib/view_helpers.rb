@@ -20,7 +20,7 @@ module Representations
       if obj.is_a?(ActiveRecord::Base)
         obj = Representations.representation_for(obj, self, symbol.to_s[1..-1]) 
       elsif obj.class == Array #handle case when controller sends array of AR objects
-        obj.map!{|o| Representations.representation_for(o, self, symbol.to_s[1..-1]) if o.is_a?(ActiveRecord::Base)}
+        obj.map!{|o| Representations.representation_for(o, self, symbol.to_s) if o.is_a?(ActiveRecord::Base)}
       end
       instance_variable_set_without_r(symbol, obj) #call to the original method
     end

@@ -4,12 +4,18 @@ module Representations
     #initilize @num variable
     def initialize(object, template, name, parent)
       super
-      @num = 0
+      @num = -1 #-1 so first call to num will result in 0
     end
     #Creates Representation for every object in the Array and invokes passed block with this Representation as the argument
     def each
-      @value.each do |object|
-        representation_object = Representations.representation_for(object, @template, object.id.to_s, self)
+      @value.each_index do |idx|
+        representation_object = Representations.representation_for(@value[idx], @template, idx.to_s, self)
+        #add to page hidden input with id of the object in the collection
+        tree = representation_object.get_parents_tree
+        name = get_html_name_attribute_value(tree)
+        name << '[id]'
+        tags = get_tags({}, {:value => @value[idx].id.to_s, :name=>name})
+        @template.concat("<input type='hidden' #{tags}/>")
         yield representation_object
       end
     end
@@ -32,12 +38,12 @@ module Representations
       def method_missing(method_name_symbol, *args, &block)
         method_name = method_name_symbol.to_s
         representation_class = case @value.class.columns_hash[method_name].type
-                                 when :date 
-                                   Representations::TimeWithZoneRepresentation
-                                 when :datetime 
-                                   Representations::TimeWithZoneRepresentation
-                                 else
-                                   Representations::DefaultRepresentation
+                               when :date 
+                                 Representations::TimeWithZoneRepresentation
+                               when :datetime 
+                                 Representations::TimeWithZoneRepresentation
+                               else
+                                 Representations::DefaultRepresentation
                                end
         method = <<-EOF
           def #{method_name}(*args, &block)

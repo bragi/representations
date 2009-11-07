@@ -4,7 +4,7 @@ Rails helpers, including form builders are great to allow rapid development of a
 
 On the other hand they are procedural in nature and have hard time to adapt to complex models. They also live in a single namespace making it difficult to find which helpers apply to which models.
 
-Representations do a paradigm switch and change syntax to object oriented and model specific.
+Representations do a paradigm shift and change syntax to object oriented and model specific.
 
 ## Example usage
 

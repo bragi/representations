@@ -1,7 +1,7 @@
-<h3>Create new djflsjflsdjfsl User:</h3>
+<h3>Create new User:</h3>
 <% r(@user).form do |user|%>
-  <%= user.nick.text_field%>
   <%= user.nick.label "Nick"%>
+  <%= user.nick.text_field%>
   <% user.profile do |profile|%>
     <%= profile.name.label%>
     <%= profile.name.text_field%>

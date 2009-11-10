@@ -2,8 +2,8 @@ load 'representation.rb'
 load 'default_representation.rb'
 load 'associations_representation.rb'
 load 'active_record_representation.rb'
-load 'nil_class_representation.rb'
 load 'date_representation.rb'
+#load 'nil_class_representation.rb'
 module Representations
   
   #Currently this method is never called but maybe someday it will have to be :-)
@@ -28,8 +28,13 @@ module Representations
   def representation_for(object, template, name, parent=nil)
     representation_class =
       begin
+        #debugger if name == "profile"
         if object.is_a?(ActiveRecord::Base)
           ActiveRecordRepresentation
+        elsif parent && parent.instance_variable_get(:@value).class.reflections[name.to_sym] && parent.instance_variable_get(:@value).class.reflections[name.to_sym].macro == :has_one
+          parent.instance_variable_get(:@value).send(name+'=', parent.instance_variable_get(:@value).class.reflections[name.to_sym].klass.new) if parent.instance_variable_get(:@value).send(name).nil? #create new AR object
+          object = parent.instance_variable_get(:@value).send(name)
+          Representations::ActiveRecordRepresentation
         else
           "Representations::#{object.class.to_s.demodulize}Representation".constantize 
         end

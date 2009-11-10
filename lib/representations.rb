@@ -1,9 +1,8 @@
-load 'representation.rb'
-load 'default_representation.rb'
-load 'associations_representation.rb'
-load 'active_record_representation.rb'
-load 'date_representation.rb'
-#load 'nil_class_representation.rb'
+require 'representation.rb'
+require 'default_representation.rb'
+require 'associations_representation.rb'
+require 'active_record_representation.rb'
+require 'date_representation.rb'
 module Representations
   
   #Currently this method is never called but maybe someday it will have to be :-)
@@ -28,7 +27,6 @@ module Representations
   def representation_for(object, template, name, parent=nil)
     representation_class =
       begin
-        #debugger if name == "profile"
         if object.is_a?(ActiveRecord::Base)
           ActiveRecordRepresentation
         elsif parent && parent.instance_variable_get(:@value).class.reflections[name.to_sym] && parent.instance_variable_get(:@value).class.reflections[name.to_sym].macro == :has_one

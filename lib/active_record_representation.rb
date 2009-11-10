@@ -29,6 +29,7 @@ module Representations
         @template.concat(@template.form_tag(path, :method => "put"))
       end
       @template.concat(content)
+      @template.concat(@template.submit_tag("ok"))
       @template.concat("</form>")
       self
     end

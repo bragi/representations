@@ -10,7 +10,7 @@ module Representations
   def self.eval_polymorphic_routes
     ActionController::PolymorphicRoutes.class_eval do
       def polymorphic_path_with_r(object, options = {})
-        object.isa_a?(Representation) ? polymorphic_path_without_r(object.instance_variable_get(:@value), options) : polymorphic_path_without_r(object, options)
+        object.is_a?(Representation) ? polymorphic_path_without_r(object.instance_variable_get(:@value), options) : polymorphic_path_without_r(object, options)
       end
       alias_method_chain :polymorphic_path, :r
     end

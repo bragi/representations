@@ -29,7 +29,7 @@ Rails helpers:
 
 Representations:
 
-    - r(user).form do
+    - r(user).form do |user|
       login:
       = user.login
       = user.email.label

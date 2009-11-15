@@ -36,6 +36,11 @@ module Representations
     def to_s
       @value ? ERB::Util::h(@value.to_s) : ''
     end
+    def link(invoked_controller_method = nil)
+      a = "/#{@value.class.to_s.downcase.pluralize}/#{@value.id}/"
+      a << invoked_controller_method.to_s if invoked_controller_method
+      %Q(<a href=#{a}>#{@value.class.to_s} #{@value.id}</a>)
+    end
     #returns html label tag for the representation
     def label(value = nil, html_options = {})
       tree = get_parents_tree

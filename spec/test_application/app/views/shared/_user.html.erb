@@ -1,4 +1,5 @@
 <% r(@user).form do |user| %>
+  <%= user.link %>
   <%= user.label "Nick"%>
   <%= user.nick.text_field %>
   <% user.profile do |profile|%>

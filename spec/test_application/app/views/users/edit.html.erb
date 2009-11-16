@@ -1,6 +1,6 @@
 <h3>Edit User:</h3>
 <% r(@user).form do |user|%>
-  <%= user.link("link do edycji", :view => 'edit') %>
+  <%= user.link %>
   <br />
   <%= user.label "Nick"%>
   <%= user.nick.text_field%>

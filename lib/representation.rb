@@ -36,10 +36,13 @@ module Representations
     def to_s
       @value ? ERB::Util::h(@value.to_s) : ''
     end
-    def link(invoked_controller_method = nil)
-      a = "/#{@value.class.to_s.downcase.pluralize}/#{@value.id}/"
-      a << invoked_controller_method.to_s if invoked_controller_method
-      %Q(<a href=#{a}>#{@value.class.to_s} #{@value.id}</a>)
+    def link(passed_options = {})
+      if @value
+        a = "/#{@value.class.to_s.downcase.pluralize}/#{@value.id}/"
+        a << passed_options[:view].to_s if passed_options[:view]
+        passed_options[:name] ? b = passed_options[:name].to_s : b = "#{@value.class.to_s} #{@value.id}"
+        %Q(<a href=#{a}>#{b}</a>)
+      end
     end
     #returns html label tag for the representation
     def label(value = nil, html_options = {})

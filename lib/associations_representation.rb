@@ -39,9 +39,9 @@ module Representations
         method_name = method_name_symbol.to_s
         representation_class = case @value.class.columns_hash[method_name].type
                                when :date 
-                                 Representations::TimeWithZoneRepresentation
+                                 Representations::DateRepresentation
                                when :datetime 
-                                 Representations::TimeWithZoneRepresentation
+                                 Representations::DateRepresentation
                                else
                                  Representations::DefaultRepresentation
                                end

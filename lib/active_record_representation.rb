@@ -21,17 +21,15 @@ module Representations
       namespace = '/' + namespace unless namespace.blank?
       path = namespace + '/' + @name.pluralize
       path.downcase!
+      content = @template.capture(self, &block)
       if @value.new_record?
-        #path += 
-        r_for_form = NewRecordRepresentation.new(@value, @template, @name, @parent)
-        content = @template.capture(r_for_form, &block)
         @template.concat(@template.form_tag(path, :method => "post"))
       else
-        content = @template.capture(self, &block)
         path += '/' + "#{@value.id}"
         @template.concat(@template.form_tag(path, :method => "put"))
       end
       @template.concat(content)
+      @template.concat(@template.submit_tag("ok"))
       @template.concat("</form>")
       self
     end
@@ -46,7 +44,7 @@ module Representations
             def #{method_name}(*args, &block)
               @__#{method_name} ||= Representations.representation_for(@value.#{method_name}, @template, "#{method_name}", self)
               @__#{method_name}.with_block(&block)
-              @__#{method_name} if block.nil?
+              @__#{method_name} if block.nil? 
             end
       EOF
       ::Representations::ActiveRecordRepresentation.class_eval(method, __FILE__, __LINE__)
@@ -57,38 +55,6 @@ module Representations
     def get_namespace
         namespace = @template.controller.class.parent_name.split('::') rescue []
         namespace = namespace.join('/') 
-    end
-    #Wraps new ActiveRecord::Base objects. This object will not create NilClassR for nil objects 
-    #For attr with has_one association it will wrap in ActiveRecordRepresentation::NewRecordRepresentation
-    #For other associations it will wrap in AssociationsRepresentation
-    #For other datatypes it will wrap in R that corresponds to the datatype in the db
-    class NewRecordRepresentation < Representation
-      def method_missing(method_name, *args, &block)
-        method = <<-EOF
-            def #{method_name}(*args, &block)
-              representation_class = if @value.class.reflections[:#{method_name}] && @value.class.reflections[:#{method_name}].macro == :has_one
-                  @value.#{method_name} = "#{method_name}".classify.constantize.new
-                  Representations::ActiveRecordRepresentation::NewRecordRepresentation
-                elsif @value.#{method_name}.respond_to?(:ancestors) && @value.#{method_name}.ancestors.include?(ActiveRecord::Associations)
-                  Representations::AssociationsRepresentation
-                else
-                  case @value.class.columns_hash["#{method_name}"].type
-                                 when :date 
-                                   Representations::DateRepresentation
-                                 when :datetime 
-                                   Representations::DateRepresentation
-                                 else
-                                   Representations::DefaultRepresentation
-                                 end
-                end
-              @__#{method_name} ||= representation_class.new(@value.#{method_name}, @template, "#{method_name}", self)
-              @__#{method_name}.with_block(&block)
-              @__#{method_name} if block.nil?
-            end
-        EOF
-        ::Representations::ActiveRecordRepresentation::NewRecordRepresentation.class_eval(method, __FILE__, __LINE__)
-        self.__send__(method_name, &block)
-      end
     end
   end
 end

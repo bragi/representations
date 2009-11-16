@@ -21,7 +21,6 @@ Then /^the user should have attributes:$/ do |data|
   due_to2 = hash[:due_to2].split(" ")
   due_to1 = Date.new(y=due_to1[0].to_i, d=due_to1[1].to_i, m=due_to1[2].to_i)
   due_to2 = Date.new(y=due_to2[0].to_i, d=due_to2[1].to_i, m=due_to2[2].to_i)
-
   @user.nick.should == hash[:nick] 
   %w{name surname eye_color}.each do |attr|
     @user.profile.send(attr).should == hash[attr]

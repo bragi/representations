@@ -30,11 +30,19 @@ module Representations
       to_s + arg.to_s
     end
     def id
-      @value.id
+      @value.id if @value
     end
     #returns escaped string from the object's to_s method
     def to_s
-      ERB::Util::h(@value.to_s)
+      @value ? ERB::Util::h(@value.to_s) : ''
+    end
+    def link(passed_options = {})
+      if @value
+        a = "/#{@value.class.to_s.downcase.pluralize}/#{@value.id}/"
+        a << passed_options[:view].to_s if passed_options[:view]
+        passed_options[:name] ? b = passed_options[:name].to_s : b = "#{@value.class.to_s} #{@value.id}"
+        %Q(<a href=#{a}>#{b}</a>)
+      end
     end
     #returns html label tag for the representation
     def label(value = nil, html_options = {})
@@ -47,7 +55,7 @@ module Representations
     protected
     #Call the passed block (if any) 
     def with_block(&block)
-      yield self if block_given?
+      yield self if block_given? && @value
     end
     #Returns two dimensional array based on the tree of the Represantation objects which are linked together by the @parent field
     #First element of the array consists of Representation's @name and the second of Representation's class
@@ -88,6 +96,9 @@ module Representations
       options.stringify_keys!
       options = options.sort
       options.map{ |key, value| %(#{key}="#{value}" ) }
+    end
+    def method_missing(method_name)
+      @value ? super : self
     end
   end
 end

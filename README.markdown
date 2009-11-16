@@ -25,11 +25,11 @@ Rails helpers:
             = f.text_field(:last_name)
             = f.radio_button(:eye_color, 'blue')
             = f.label(:eye_color_blue, "Blue")
-      = f.submit("Submit")
+      = f.submit("ok")
 
 Representations:
 
-    - r(user).form do
+    - r(user).form do |user|
       login:
       = user.login
       = user.email.label

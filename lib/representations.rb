@@ -1,9 +1,8 @@
-load 'representation.rb'
-load 'default_representation.rb'
-load 'associations_representation.rb'
-load 'active_record_representation.rb'
-load 'nil_class_representation.rb'
-load 'date_representation.rb'
+require 'representation.rb'
+require 'default_representation.rb'
+require 'associations_representation.rb'
+require 'active_record_representation.rb'
+require 'date_representation.rb'
 module Representations
   
   #Currently this method is never called but maybe someday it will have to be :-)
@@ -11,7 +10,7 @@ module Representations
   def self.eval_polymorphic_routes
     ActionController::PolymorphicRoutes.class_eval do
       def polymorphic_path_with_r(object, options = {})
-        object.isa_a?(Representation) ? polymorphic_path_without_r(object.instance_variable_get(:@value), options) : polymorphic_path_without_r(object, options)
+        object.is_a?(Representation) ? polymorphic_path_without_r(object.instance_variable_get(:@value), options) : polymorphic_path_without_r(object, options)
       end
       alias_method_chain :polymorphic_path, :r
     end
@@ -30,6 +29,10 @@ module Representations
       begin
         if object.is_a?(ActiveRecord::Base)
           ActiveRecordRepresentation
+        elsif parent && parent.instance_variable_get(:@value).class.reflections[name.to_sym] && parent.instance_variable_get(:@value).class.reflections[name.to_sym].macro == :has_one
+          parent.instance_variable_get(:@value).send(name+'=', parent.instance_variable_get(:@value).class.reflections[name.to_sym].klass.new) if parent.instance_variable_get(:@value).send(name).nil? #create new AR object
+          object = parent.instance_variable_get(:@value).send(name)
+          Representations::ActiveRecordRepresentation
         else
           "Representations::#{object.class.to_s.demodulize}Representation".constantize 
         end

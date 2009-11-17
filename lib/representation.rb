@@ -29,6 +29,9 @@ module Representations
     def +(arg)
       to_s + arg.to_s
     end
+    def to_param
+      @value.id.to_s
+    end
     def id
       @value.id if @value
     end

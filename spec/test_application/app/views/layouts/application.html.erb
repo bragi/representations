@@ -6,6 +6,7 @@
    <title>Representations - test app</title>
    <%= stylesheet_link_tag 'bragi' %>
 </head>
+<body>
 <div id="header">
   Representations
   <%= link_to "users", users_path %>
@@ -22,15 +23,8 @@
 <br />
 <%= link_to "new task", new_task_path %>
 </div>
-<hr>
-<b>Debug params:</b>
-<br />
-<%= debug params %>
-<br />
-<b>Debug seesion:</b>
-<br />
-<%= debug session %>
-<br />
+</body>
+
 
 
 

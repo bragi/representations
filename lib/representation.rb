@@ -36,12 +36,14 @@ module Representations
     def to_s
       @value ? ERB::Util::h(@value.to_s) : ''
     end
-    def link(passed_options = {})
+    def link(link_title = "", passed_options = {})
       if @value
         a = "/#{@value.class.to_s.downcase.pluralize}/#{@value.id}/"
         a << passed_options[:view].to_s if passed_options[:view]
-        passed_options[:name] ? b = passed_options[:name].to_s : b = "#{@value.class.to_s} #{@value.id}"
+        link_title.to_s.empty? ? b = "#{@value.class.to_s} #{@value.id}" : b = link_title.to_s
         %Q(<a href=#{a}>#{b}</a>)
+      else
+        ""
       end
     end
     #returns html label tag for the representation

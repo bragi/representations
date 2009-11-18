@@ -14,11 +14,12 @@ module Representations
       @parent && @parent.instance_variable_get(:@value).class.reflections[:"#{@name}"].macro == :has_one ? partial(@name) : super
     end
     #Form tag, namespace depends on the namespace of the controller.
-    def form(&block)
+    def form(path = nil, &block)
       raise "You need to provide block to form representation" unless block_given?
       content = @template.capture(self, &block)
       @value.new_record? ? options = {:method => "post"} : options = {:method => "put"}
-      @template.concat(@template.form_tag(@template.polymorphic_path(@value), options))
+      path = @template.polymorphic_path(@value) unless path
+      @template.concat(@template.form_tag(path), options)
       @template.concat(content)
       @template.concat(@template.submit_tag("ok"))
       @template.concat("</form>")

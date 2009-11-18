@@ -1,4 +1,6 @@
 <%= @user.nick %>
+<%= @user.partial('test_partial') %>
+<%= @user.partial('test_partial', '/good/bad/ugly') %>
 <%= link_to "edit", edit_user_path(@user) %>
 <br />
 <%= link_to 'users', users_path %>

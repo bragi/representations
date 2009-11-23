@@ -29,8 +29,8 @@ module Representations
     def +(arg)
       to_s + arg.to_s
     end
-    def id
-      @value.id if @value
+    def to_param
+      @value.id.to_s if @value
     end
     #returns escaped string from the object's to_s method
     def to_s

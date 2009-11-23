@@ -3,35 +3,40 @@ module Representations
   class ActiveRecordRepresentation < Representation
     #Render partial with the given name and given namespace as a parameter
     def partial(partial_name, namespace = nil)
-      namespace = get_namespace unless namespace
-      namespace += '/'
-      path = @name.pluralize
-      path = namespace + path
-      path.downcase!
-      @template.render(:partial => "#{path}/#{partial_name}")
+      if namespace
+        @template.render(:partial => "#{namespace}/#{@value.class.to_s.pluralize.downcase}/#{partial_name}")
+      else 
+        @template.render(:partial => "#{@template.polymorphic_path(@value)[/\/.*\//]}#{partial_name}")
+      end
     end
     #Render partial if it has 'has_one' association with the other model, otherwise do normal to_s
     def to_s
       @parent && @parent.instance_variable_get(:@value).class.reflections[:"#{@name}"].macro == :has_one ? partial(@name) : super
     end
     #Form tag, namespace depends on the namespace of the controller.
-    def form(&block)
+    def form(path = nil, &block)
       raise "You need to provide block to form representation" unless block_given?
-      namespace = get_namespace
-      namespace = '/' + namespace unless namespace.blank?
-      path = namespace + '/' + @name.pluralize
-      path.downcase!
       content = @template.capture(self, &block)
-      if @value.new_record?
-        @template.concat(@template.form_tag(path, :method => "post"))
-      else
-        path += '/' + "#{@value.id}"
-        @template.concat(@template.form_tag(path, :method => "put"))
-      end
+      @value.new_record? ? options = {:method => "post"} : options = {:method => "put"}
+      path = @template.polymorphic_path(@value) unless path
+      @template.concat(@template.form_tag(path), options)
       @template.concat(content)
       @template.concat(@template.submit_tag("ok"))
       @template.concat("</form>")
       self
+    end
+    #method not tested
+    def namespace(passed_namespace)
+      if passed_namespace
+        path = @template.polymorphic_path(@value) << passed_namespace.to_s
+        view = @template.clone
+        #singleton method to modify default polymorphic_path in single variable
+        def view.polymorphic_path
+          "#{path}"
+        end
+      else
+        ""
+      end
     end
     #Forwards ActiveRecord invocation and wraps result in appropriate Representation
     #Suppose that User extends ActiveRecord::Base:
@@ -49,12 +54,6 @@ module Representations
       EOF
       ::Representations::ActiveRecordRepresentation.class_eval(method, __FILE__, __LINE__)
       self.__send__(method_name, &block)
-    end
-    private
-    #Gets path to namespace (i.e. if controller is Good::Bad::Ugly::UsersController the R is in the namespace good/bad/ugly)
-    def get_namespace
-        namespace = @template.controller.class.parent_name.split('::') rescue []
-        namespace = namespace.join('/') 
     end
   end
 end

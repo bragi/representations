@@ -1,33 +1,33 @@
 <h3>Create new User:</h3>
-<% r(@user).form do |user|%>
-  <%= user.nick.label "Nick"%>
-  <%= user.nick.text_field%>
-  <% user.profile do |profile|%>
-    <%= profile.name.label%>
-    <%= profile.name.text_field%>
+<% r(@user).form do |user| %>
+  <%= user.nick.label "Nick" %>
+  <%= user.nick.text_field %>
+  <% user.profile do |profile| %>
+    <%= profile.name.label %>
+    <%= profile.name.text_field %>
     <br />
-    <%= profile.surname.label%>
-    <%= profile.surname.text_field%>
+    <%= profile.surname.label %>
+    <%= profile.surname.text_field %>
     <br />
-    <%= profile.eye_color.radio_button_label('blue')%>
-    <%= profile.eye_color.radio_button('blue')%>
+    <%= profile.eye_color.radio_button_label('blue') %>
+    <%= profile.eye_color.radio_button('blue') %>
     <br />
-    <%= profile.eye_color.radio_button_label('green', 'Green')%>
-    <%= profile.eye_color.radio_button('green')%>
+    <%= profile.eye_color.radio_button_label('green', 'Green') %>
+    <%= profile.eye_color.radio_button('green') %>
     <br />
-    <%= profile.eye_color.radio_button_label('other', 'Different')%>
-    <%= profile.eye_color.radio_button('other')%>
+    <%= profile.eye_color.radio_button_label('other', 'Different') %>
+    <%= profile.eye_color.radio_button('other') %>
     <br />
-    <%= profile.characteristics.label%>
-    <%= profile.characteristics.text_area%>
+    <%= profile.characteristics.label %>
+    <%= profile.characteristics.text_area %>
     <br />
-  <%end%>
-  <% user.tasks.build do |task|%>
-    <%= task.title.text_field%>
-    <%= task.priority.text_field%>
-    <%= task.description.text_field%>
-    <%= task.due_to.select%>
-  <%end%>
-<%end%>
+  <% end %>
+  <% user.tasks.build do |task| %>
+    <%= task.title.text_field %>
+    <%= task.priority.text_field %>
+    <%= task.description.text_field %>
+    <%= task.due_to.select %>
+  <% end %>
+<% end %>
 <%= link_to "resign", root_path %>
 

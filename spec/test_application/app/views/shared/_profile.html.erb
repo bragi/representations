@@ -1,24 +1,24 @@
-<%@profile.form do |t|%>
-  <%=t.label "For user:"%>
-  <%=collection_select(:profile, :user_id, User.all, :id, :nick) %>
+<% @profile.form do |t| %>
+  <%= t.label "For user:" %>
+  <%= collection_select(:profile, :user_id, User.all, :id, :nick) %>
   <br />
-  <%=t.name.label%>
-  <%=t.name.text_field %>
+  <%= t.name.label %>
+  <%= t.name.text_field %>
   <br />
-  <%=t.surname.label%>
-  <%=t.surname.text_field %>
+  <%= t.surname.label %>
+  <%= t.surname.text_field %>
   <br />
-  <%= t.eye_color.radio_button_label('blue')%>
+  <%= t.eye_color.radio_button_label('blue') %>
   <%= t.eye_color.radio_button('blue') %>
   <br />
-  <%= t.eye_color.radio_button_label('green')%>
+  <%= t.eye_color.radio_button_label('green') %>
   <%= t.eye_color.radio_button('green') %>
   <br />
-  <%= t.eye_color.radio_button_label('other')%>
+  <%= t.eye_color.radio_button_label('other') %>
   <%= t.eye_color.radio_button('other') %>
   <br />
-  <%= t.characteristics.label%>
+  <%= t.characteristics.label %>
   <%= t.characteristics.text_area %>
   <br />
-<%end%>
+<% end %>
 <%= link_to "resign", root_path %>

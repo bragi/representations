@@ -1,12 +1,8 @@
 <p>
   <%= @user.nick %>
 </p>
-<p>
-  <%= @user.partial('test_partial') %>
-</p>
-<p>
-  <%= @user.partial('test_partial', '/good/bad/ugly') %>
-</p>
+<%= @user.partial('test_partial') %>
+<%= @user.partial('test_partial', '/good/bad/ugly') %>
 <p>
   <%= link_to "edit", edit_user_path(@user) %>
 </p>

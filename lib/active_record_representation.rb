@@ -27,15 +27,11 @@ module Representations
     end
     #method not tested
     def namespace(passed_namespace)
-      if passed_namespace
-        path = @template.polymorphic_path(@value) << passed_namespace.to_s
-        view = @template.clone
-        #singleton method to modify default polymorphic_path in single variable
-        def view.polymorphic_path
-          "#{path}"
-        end
-      else
-        ""
+      path = @template.polymorphic_path(@value) << passed_namespace.to_s
+      view = @template.clone
+      #singleton method to modify default polymorphic_path in single variable
+      def view.polymorphic_path
+        "#{path}"
       end
     end
     #Forwards ActiveRecord invocation and wraps result in appropriate Representation

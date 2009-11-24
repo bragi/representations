@@ -1,7 +1,7 @@
 <h3>User's list:</h3>
-<%@users.each do |s|%>
+<% @users.each do |s| %>
   <%= s.nick %>
   <%= link_to "edit user", edit_user_path(s) %>
   <br />
-<%end%>
+<% end %>
 

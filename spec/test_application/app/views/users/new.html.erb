@@ -22,11 +22,24 @@
     <%= profile.characteristics.text_area %>
     <br />
   <% end %>
+<h4>User task:</h4>
   <% user.tasks.build do |task| %>
+    <p>
+    <%= task.title.label %>
     <%= task.title.text_field %>
+    </p>
+    <p>
+    <%= task.priority.label %>
     <%= task.priority.text_field %>
-    <%= task.description.text_field %>
+    </p>
+    <p>
+    <%= task.description.label %>
+    <%= task.description.text_area %>
+    </p>
+    <p>
+    <%= task.due_to.label %>
     <%= task.due_to.select %>
+    </p>
   <% end %>
 <% end %>
 <%= link_to "resign", root_path %>

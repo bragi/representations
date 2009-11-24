@@ -14,16 +14,21 @@
   <%= link_to "tasks", tasks_path %>
 </div>
 <%= flash[:notice] %>
-  <div id="main">
+<div id="main">
   <%= yield %>
-  <br />
-<%= link_to "new user", new_user_path %>
-<br />
-<%= link_to "new profile", new_profile_path %>
-<br />
-<%= link_to "new task", new_task_path %>
 </div>
+<hr>
+<p>
+  <%= link_to "new user", new_user_path %>
+</p>
+<p>
+  <%= link_to "new profile", new_profile_path %>
+</p>
+<p>
+  <%= link_to "new task", new_task_path %>
+</p>
 </body>
+</html>
 
 
 

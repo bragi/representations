@@ -33,7 +33,7 @@ module Representations
       %Q{<input type="text" #{tags}/>}
     end
     #Returns string with html text area tag
-    def text_area(html_options = {})
+    def text_area(html_options = {:rows => "5", :cols => "20"})
       tree = get_parents_tree
       id_attr_value = tree.collect{ |x| x[0] }.join('_') 
       tags = get_tags(html_options, {:id => id_attr_value, :name => get_html_name_attribute_value(tree)})

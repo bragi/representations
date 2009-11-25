@@ -52,9 +52,9 @@ module Representations
       id_attr_value = tree.collect{ |x| x[0] }.join('_') + "_#{value}"
       name_attr_value = get_html_name_attribute_value(tree)
       if @value && @value.capitalize==value.capitalize #if editing existing record and values do match
-        options = {:name => name_attr_value, :value=>value, :id=>id_attr_value, :checked=>"true"}
+        options = {:name => name_attr_value, :value=>value, :id=>id_attr_value, :checked=>"checked"}
       else
-        options = {:name => name_attr_value, :value=>value, :id=>id_attr_value, :checked=>"false"}
+        options = {:name => name_attr_value, :value=>value, :id=>id_attr_value}
       end
       tags = get_tags(html_options, options)
       %Q{<input type="radio" #{tags}/>}

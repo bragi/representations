@@ -17,9 +17,9 @@ module Representations
     def form(path = nil, &block)
       raise "You need to provide block to form representation" unless block_given?
       content = @template.capture(self, &block)
-      @value.new_record? ? options = {:method => "post"} : options = {:method => "put"}
+      @value.new_record? ? options = {:method => :post} : options = {:method => :put}
       path = @template.polymorphic_path(@value) unless path
-      @template.concat(@template.form_tag(path), options)
+      @template.concat(@template.form_tag(path, options))
       @template.concat(content)
       @template.concat(@template.submit_tag("ok"))
       @template.concat("</form>")

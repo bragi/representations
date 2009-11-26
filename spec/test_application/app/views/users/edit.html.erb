@@ -50,6 +50,25 @@
       <%= task.due_to.select %>
     </p>
   <% end %>
+<h2>New user's task:</h2>
+  <% user.tasks.build do |task| %>
+    <p>
+      <%= task.title.label %>
+      <%= task.title.text_field %>
+    </p>
+    <p>
+      <%= task.priority.label %>
+      <%= task.priority.text_field %>
+    </p>
+    <p>
+      <%= task.description.label %>
+      <%= task.description.text_area %>
+    </p>
+    <p>
+      <%= task.due_to.label %>
+      <%= task.due_to.select %>
+    </p>
+  <% end %>
 <% end %>
 
 <%= link_to "cancel", root_path %>

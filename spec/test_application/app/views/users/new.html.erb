@@ -53,5 +53,10 @@
     </p>
   <% end %>
 <% end %>
+
+<% r(@user).namespace(:admin).form do |namespace| %>
+  <%= namespace.label "namespace test" %>
+<% end %>
+
 <%= link_to "cancel", root_path %>
 

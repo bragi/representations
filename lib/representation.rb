@@ -1,14 +1,17 @@
 module Representations
   class Representation
+    attr_accessor :namespace
     #value - object for which the representation is created 
     #template - template view (needed because some ActionView::Base methods are private)
     #name - the actuall name of the method that was called on the object's parent that is being initialize
     #parent - Representation object which contains the object that is being initialize
-    def initialize(value, template, name, parent=nil)
+    #namespace - allows to determine required namespace - useful for forms
+    def initialize(value, template, name, parent=nil, namespace=nil)
       @value = value
       @name = name
       @template = template
       @parent = parent
+      @namespace = namespace
 
       #extend class if user provided appropriate file (look at the files app/representations/*_representation.rb)
       #first check if file exists in app/representations
@@ -45,6 +48,15 @@ module Representations
       else
         ""
       end
+    end
+    #build or modify @namespace for Representation object 
+    def current_namespace(passed_namespace = nil)
+      if passed_namespace
+        @namespace = "/" << passed_namespace.to_s << @template.polymorphic_path(@value)
+      else
+        @namespace = @template.polymorphic_path(@value)
+      end
+      @namespace
     end
     #returns html label tag for the representation
     def label(value = nil, html_options = {})

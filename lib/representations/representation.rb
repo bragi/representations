@@ -101,6 +101,7 @@ module Representations
       options = options.sort
       options.map{ |key, value| %(#{key}="#{value}" ) }
     end
+    #If the wrapped object is nil return self to avoid invoking methods on nil object (if any will occur)
     def method_missing(method_name)
       @value ? super : self
     end

@@ -31,6 +31,16 @@ module Representations
       @template.concat("</form>")
       self
     end
+    def link(link_title = "", passed_options = {})
+      if @value
+        a = "\"/#{@value.class.to_s.downcase.pluralize}/#{@value.id}/"
+        passed_options[:view] ? a << passed_options[:view].to_s << "\"": a << "\"" 
+        link_title.to_s.empty? ? b = "#{@value.class.to_s} #{@value.id}" : b = link_title.to_s
+        %Q(<a href=#{a}>#{b}</a>)
+      else
+        ""
+      end
+    end
     #clone Representation object and set it's @namespace variable to required value
     def namespace(a)
       namespaced_representation = self.clone

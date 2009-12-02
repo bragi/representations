@@ -1,8 +1,12 @@
-require 'representation.rb'
-require 'default_representation.rb'
-require 'associations_representation.rb'
-require 'active_record_representation.rb'
-require 'date_representation.rb'
+require "#{File.dirname(__FILE__)}/representations/representation"
+require "#{File.dirname(__FILE__)}/representations/default_representation"
+require "#{File.dirname(__FILE__)}/representations/associations_representation"
+require "#{File.dirname(__FILE__)}/representations/active_record_representation.rb"
+require "#{File.dirname(__FILE__)}/representations/date_representation"
+require "#{File.dirname(__FILE__)}/representations/view_helpers"
+
+ActionView::Base.send :include, Representations::ViewHelpers
+
 module Representations
   
   #Currently this method is never called but maybe someday it will have to be :-)

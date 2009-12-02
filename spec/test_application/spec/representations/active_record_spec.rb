@@ -1,5 +1,4 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
-require 'representations'
 
 describe Representations::ActiveRecordRepresentation do
   it "when a method with the same name as associated object is called with a block it should create html tags for representations passed inside a block" do

@@ -36,9 +36,7 @@ module Representations
         a = %Q{"/#{@value.class.to_s.downcase.pluralize}/#{@value.id}}
         html_options = ""
         passed_options[:view] ? a << "/" << passed_options[:view].to_s << '"': a << '"'
-        if passed_options.size > 1
-          passed_options.each_pair {|k, v| html_options << " #{k}" << "=" << "\"#{v}\"" unless k == :view}
-        end
+        passed_options.each_pair {|k, v| html_options << " #{k}" << "=" << "\"#{v}\"" unless k == :view}
         link_title.to_s.empty? ? b = "#{@value.class.to_s} #{@value.id}" : b = link_title.to_s
         %Q(<a href=#{a}#{html_options}>#{b}</a>)
       else

@@ -1,8 +1,10 @@
 <h3>Tasks list:</h3>
-<% @tasks.each do |f| %>
-  <%= f.title %>
-  <%= link_to "edit tasks", edit_task_path(f.id) %>
-  <br/>
-<% end %>
-
+<ul>
+  <% @tasks.each do |f| %>
+    <li>
+      <%= link_to "#{f.title}", task_path(f) %>
+      <%= link_to "edit task", edit_task_path(f) %>
+    </li>
+  <% end %>
+</ul>
 

@@ -17,22 +17,25 @@ module Representations
     def form(path = nil, &block)
       raise "You need to provide block to form representation" unless block_given?
       content = @template.capture(self, &block)
-      @value.new_record? ? options = {:method => "post"} : options = {:method => "put"}
-      path = @template.polymorphic_path(@value) unless path
-      @template.concat(@template.form_tag(path), options)
+      @value.new_record? ? options = {:method => :post} : options = {:method => :put}
+      if path
+        path = path
+      elsif @namespace      
+        path = @namespace.to_s
+      else
+        path = @template.polymorphic_path(@value)
+      end
+      @template.concat(@template.form_tag(path, options))
       @template.concat(content)
       @template.concat(@template.submit_tag("ok"))
       @template.concat("</form>")
       self
     end
-    #method not tested
-    def namespace(passed_namespace)
-      path = @template.polymorphic_path(@value) << passed_namespace.to_s
-      view = @template.clone
-      #singleton method to modify default polymorphic_path in single variable
-      def view.polymorphic_path
-        "#{path}"
-      end
+    #clone Representation object and set it's @namespace variable to required value
+    def namespace(a)
+      namespaced_representation = self.clone
+      namespaced_representation.namespace = current_namespace(a)
+      namespaced_representation
     end
     #Forwards ActiveRecord invocation and wraps result in appropriate Representation
     #Suppose that User extends ActiveRecord::Base:

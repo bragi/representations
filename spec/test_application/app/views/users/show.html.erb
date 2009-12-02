@@ -1,6 +1,55 @@
+<p>
+<%= @user.nick.label %>
 <%= @user.nick %>
+</p>
+<% @user.profile do |profile| %>
+  <p>
+  <%= profile.name.label %>
+  <%= profile.name %>
+  </p>
+  <p>
+  <%= profile.surname.label %>
+  <%= profile.surname %>
+  </p>
+  <p>
+  Eye color:
+  </p>
+  <p>
+  <%= profile.eye_color.label %>
+  <%= profile.eye_color %>
+  </p>
+  <p>
+  <p>
+  <%= profile.characteristics.label %>
+  <%= profile.characteristics %>
+  </p>
+<% end %>
+<h4>User task:</h4>
+<% @user.tasks.each do |task| %>
+  <p>
+  <%= task.title.label %>
+  <%= task.title %>
+  </p>
+  <p>
+  <%= task.priority.label %>
+  <%= task.priority %>
+  </p>
+  <p>
+  <%= task.description.label %>
+  <%= task.description %>
+  </p>
+  <p>
+  <%= task.due_to.label %>
+  <%= task.due_to %>
+  </p>
+<% end %>
+<p>
 <%= @user.partial('test_partial') %>
 <%= @user.partial('test_partial', '/good/bad/ugly') %>
+</p>
+<p>
 <%= link_to "edit", edit_user_path(@user) %>
-<br />
+</p>
+<p>
 <%= link_to 'users', users_path %>
+</p>

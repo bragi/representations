@@ -1,5 +1,8 @@
 <h3>List of profiles:</h3>
+<ul>
 <% @profiles.each do |s| %>
-  <%= s.user.nick %>
-  <br />
+  <li>
+    <%= s.user.nick %>
+  </li>
 <% end %>
+</ul>

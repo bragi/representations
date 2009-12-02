@@ -1,4 +1,13 @@
-Details of the task:
-<%= @task.title %>
-
-<%= @task.due_to %>
+<b>Details of the task:</b>
+<p>
+  Task title:
+  <%= @task.title %>
+</p>
+<p>
+  To be done before:
+  <%= @task.due_to %>
+</p>
+<p>
+  Belongs to:
+  <%= @task.user.nick %>
+</p>

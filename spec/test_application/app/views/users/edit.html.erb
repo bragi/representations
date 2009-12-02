@@ -1,34 +1,74 @@
 <h3>Edit User:</h3>
 <% r(@user).form do |user| %>
   <%= user.link %>
-  <br />
-  <%= user.label "Nick" %>
-  <%= user.nick.text_field %>
+  <p>
+    <%= user.label "Nick" %>
+    <%= user.nick.text_field %>
+  </p>
   <% user.profile do |profile| %>
-    <%= profile.name.label %>
-    <%= profile.name.text_field %>
-    <br />
-    <%= profile.surname.label %>
-    <%= profile.surname.text_field %>
-    <br />
-    <%= profile.eye_color.radio_button_label('blue') %>
-    <%= profile.eye_color.radio_button('blue') %>
-    <br />
-    <%= profile.eye_color.radio_button_label('green', 'Green') %>
-    <%= profile.eye_color.radio_button('green') %>
-    <br />
-    <%= profile.eye_color.radio_button_label('other', 'Different') %>
-    <%= profile.eye_color.radio_button('other') %>
-    <br />
-    <%= profile.characteristics.label %>
-    <%= profile.characteristics.text_area %>
-    <br />
+    <p>
+      <%= profile.name.label %>
+      <%= profile.name.text_field %>
+    </p>
+    <p>
+      <%= profile.surname.label %>
+      <%= profile.surname.text_field %>
+    </p>
+    <p>
+      <%= profile.eye_color.radio_button_label('blue') %>
+      <%= profile.eye_color.radio_button('blue') %>
+    </p>
+    <p>
+      <%= profile.eye_color.radio_button_label('green', 'Green') %>
+      <%= profile.eye_color.radio_button('green') %>
+    </p>
+    <p>
+      <%= profile.eye_color.radio_button_label('other', 'Different') %>
+      <%= profile.eye_color.radio_button('other') %>
+    </p>
+    <p>
+      <%= profile.characteristics.label %>
+      <%= profile.characteristics.text_area %>
+    </p>
   <% end %>
+<h4>User tasks: </h4>
   <% user.tasks.each do |task| %>
-    <%= task.title.text_field %>
-    <%= task.priority.text_field %>
-    <%= task.description.text_field %>
-    <%= task.due_to.select %>
+    <p>
+      <%= task.title.label %>
+      <%= task.title.text_field %>
+    </p>
+    <p>
+      <%= task.priority.label %>
+      <%= task.priority.text_field %>
+    </p>
+    <p>
+      <%= task.description.label %>
+      <%= task.description.text_field %>
+    </p>
+    <p>
+      <%= task.due_to.label %>
+      <%= task.due_to.select %>
+    </p>
   <% end %>
+<h2>New user's task:</h2>
+  <% user.tasks.build do |task| %>
+    <p>
+      <%= task.title.label %>
+      <%= task.title.text_field %>
+    </p>
+    <p>
+      <%= task.priority.label %>
+      <%= task.priority.text_field %>
+    </p>
+    <p>
+      <%= task.description.label %>
+      <%= task.description.text_area %>
+    </p>
+    <p>
+      <%= task.due_to.label %>
+      <%= task.due_to.select %>
+    </p>
   <% end %>
-<%= link_to "resign", root_path %>
+<% end %>
+
+<%= link_to "cancel", root_path %>

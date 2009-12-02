@@ -1,14 +1,21 @@
 <% @task.form do |f| %>
-  <%= f.title.label %>
-  <%= f.title.text_field %>
-  <br />
-  <%= f.due_to.label %>
-  <%= f.due_to.select %>
-  <br />  
-  <%= f.description.label %>
-  <%= f.description.text_area %>
-  <br />  
-  <%= f.priority.label %>
-  <%= f.priority.text_field %>
-  <br />  
+  <p>
+    <%= f.title.label %>
+    <%= f.title.text_field %>
+  </p>
+  <p>
+    <%= f.due_to.label %>
+    <%= f.due_to.select %>
+  </p>
+  <p>
+    <%= f.description.label %>
+    <%= f.description.text_area %>
+  </p>
+  <p>
+    <%= f.priority.label %>
+    <%= f.priority.text_field %>
+  </p>
 <% end %>
+<p>
+  <%= link_to "cancel", root_path %>
+</p>

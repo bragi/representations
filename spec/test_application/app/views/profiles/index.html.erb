@@ -3,6 +3,7 @@
 <% @profiles.each do |s| %>
   <li>
     <%= s.user.nick %>
+    <%= s.link("edit", :view => "edit") %>
   </li>
 <% end %>
 </ul>

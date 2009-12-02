@@ -3,7 +3,7 @@
   <% @users.each do |s| %>
     <li>
       <%= s.nick %>
-      <%= link_to "edit user", edit_user_path(s) %>
+      <%= s.link("edit", :view => 'edit') %>
     </li>
   <% end %>
 </ul>

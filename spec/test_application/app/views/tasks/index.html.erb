@@ -2,8 +2,8 @@
 <ul>
   <% @tasks.each do |f| %>
     <li>
-      <%= link_to "#{f.title}", task_path(f) %>
-      <%= link_to "edit task", edit_task_path(f) %>
+      <%= f.link %>
+      <%= f.link("edit", :view => 'edit') %>
     </li>
   <% end %>
 </ul>

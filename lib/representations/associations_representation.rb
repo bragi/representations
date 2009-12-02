@@ -8,6 +8,7 @@ module Representations
     end
     #Creates Representation for every object in the Array and invokes passed block with this Representation as the argument
     def each
+      raise "You must supply a block" unless block_given?
       @value.each_index do |idx|
         representation_object = Representations.representation_for(@value[idx], @template, idx.to_s, self)
         #add to page hidden input with id of the object in the collection

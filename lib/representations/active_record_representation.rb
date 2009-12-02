@@ -34,9 +34,13 @@ module Representations
     def link(link_title = "", passed_options = {})
       if @value
         a = %Q{"/#{@value.class.to_s.downcase.pluralize}/#{@value.id}}
-        passed_options[:view] ? a << "/" << passed_options[:view].to_s << '"': a << '"' 
+        html_options = ""
+        passed_options[:view] ? a << "/" << passed_options[:view].to_s << '"': a << '"'
+        if passed_options.size > 1
+          passed_options.each_pair {|k, v| html_options << " #{k}" << "=" << "\"#{v}\"" unless k == :view}
+        end
         link_title.to_s.empty? ? b = "#{@value.class.to_s} #{@value.id}" : b = link_title.to_s
-        %Q(<a href=#{a}>#{b}</a>)
+        %Q(<a href=#{a}#{html_options}>#{b}</a>)
       else
         ""
       end

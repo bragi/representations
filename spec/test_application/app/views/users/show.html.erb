@@ -2,6 +2,9 @@
 <%= @user.nick.label %>
 <%= @user.nick %>
 </p>
+<p>
+<%= @user.link("edycja", :view => 'edit') %>
+</p>
 <% @user.profile do |profile| %>
   <p>
   <%= profile.name.label %>

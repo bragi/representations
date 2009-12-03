@@ -14,5 +14,12 @@ describe Representations::DefaultRepresentation do
     user = Representations::representation_for(user, nil, 'user')
     user.profile.name.label.should == %Q{<label for="user_profile_name" >#{ERB::Util::h("Name")}</label>}
   end
+
+  it "text_area method should create valid html" do
+    user = stub_model(User, {:id => "5"})
+    user = Representations::representation_for(user, nil, 'user')
+    user.profile.characteristics.text_area(:cols => 30).should == %Q{<textarea cols="30" id="user_profile_characteristics" name="user[profile_attributes][characteristics]" rows="5" >\n\n</textarea>}
+  end
+
 end
 

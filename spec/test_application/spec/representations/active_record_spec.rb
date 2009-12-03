@@ -31,6 +31,10 @@ describe Representations::ActiveRecordRepresentation do
     it "without passed title should return proper html a tag with wrapped object's class name and id as a title" do
       @user.link().should == '<a href="/users/1">User 1</a>'
     end
+
+    it "should create html a tag with attributes when additional parameter is specified" do
+      @user.link("title", :class => "my class", :id => "my id", :funky_attr => "funk baby").should == '<a href="/users/1" class="my class" funky_attr="funk baby" id="my id">title</a>'
+    end
   end
 
   describe :to_s do

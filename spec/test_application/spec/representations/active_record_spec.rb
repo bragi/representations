@@ -31,6 +31,11 @@ describe Representations::ActiveRecordRepresentation do
     it "without passed title should return proper html a tag with wrapped object's class name and id as a title" do
       @user.link().should == '<a href="/users/1">User 1</a>'
     end
+
+    it "should pass pairs from hash (other then key == :view) into html options" do
+      @user.link("test", :view => 'edit', :class => "AA", :style => "BB").should == '<a href="/users/1/edit" class="AA" style="BB">test</a>'
+    end
+
   end
 
   describe :to_s do

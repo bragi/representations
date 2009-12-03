@@ -32,8 +32,8 @@ describe Representations::ActiveRecordRepresentation do
       @user.link().should == '<a href="/users/1">User 1</a>'
     end
 
-    it "should create html a tag with attributes when additional parameter is specified" do
-      @user.link("title", :class => "my class", :id => "my id", :funky_attr => "funk baby").should == '<a href="/users/1" class="my class" funky_attr="funk baby" id="my id">title</a>'
+    it "should pass pairs from hash (other then key == :view) into html options" do
+      @user.link("test", :view => 'edit', :class => "AA", :style => "BB").should == '<a href="/users/1/edit" class="AA" style="BB">test</a>'
     end
   end
 

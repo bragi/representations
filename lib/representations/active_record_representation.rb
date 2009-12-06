@@ -46,7 +46,7 @@ module Representations
     #clone Representation object and set it's @namespace variable to required value
     def namespace(a)
       namespaced_representation = self.clone
-      namespaced_representation.namespace = current_namespace(a)
+      namespaced_representation.current_namespace(a)
       namespaced_representation
     end
     #Forwards ActiveRecord invocation and wraps result in appropriate Representation

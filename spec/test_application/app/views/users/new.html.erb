@@ -58,5 +58,8 @@
   <%= namespace.label "namespace test" %>
 <% end %>
 
+<% r(@user).form do |new_form| %>
+  <%= new_form.nick.label "return to old repr. object test" %>
+<% end %>
 <%= link_to "cancel", root_path %>
 

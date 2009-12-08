@@ -21,5 +21,22 @@ describe Representations::DefaultRepresentation do
     user.profile.characteristics.text_area(:cols => 30).should == %Q{<textarea cols="30" id="user_profile_characteristics" name="user[profile_attributes][characteristics]" rows="5" >\n\n</textarea>}
   end
 
+  it "password_field method should create valid html" do
+    profile = stub_model(Profile, {:id => "5"})
+    profile = Representations::representation_for(profile, nil, 'profile')
+    profile.password.password_field.should == %Q{<input type="password" id="profile_password" name="profile[password]" value="" />}
+  end
+
+  it "hidden_field method should create valid html" do
+    profile = stub_model(Profile)
+    profile = Representations::representation_for(profile, nil, 'profile')
+    profile.hidden_value.hidden_field.should == %Q{<input type="hidden" id="profile_hidden_value" name="profile[hidden_value]" value="" />}
+  end
+
+  it "file_field method should create valid html" do
+    profile = stub_model(Profile)
+    profile = Representations::representation_for(profile, nil, 'profile')
+    profile.picture.file_field.should == %Q{<input type="file" id="profile_picture" name="profile[picture]" value="" />}
+  end
 end
 

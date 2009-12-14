@@ -7,7 +7,7 @@ module Representations
       id_attr_value = tree.collect{ |x| x[0] }.join('_') 
       name_attr_value = get_html_name_attribute_value(tree)
       tags = get_tags(html_options, {:value => checked_value, :id => id_attr_value, :name=>name_attr_value})
-      %Q{<input type="checkbox" #{tags}/>\n<input type="hidden" value="#{unchecked_value}" id="#{id_attr_value}" name="#{name_attr_value}"/>}
+      %Q{<input type="checkbox" #{tags}/>\n<input type="hidden" value="#{unchecked_value}" name="#{name_attr_value}"/>}
     end
     #not tested in the view
     #Returns string with html file field tag

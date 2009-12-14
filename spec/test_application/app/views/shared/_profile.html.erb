@@ -1,8 +1,5 @@
 <% @profile.form do |t| %>
-  <p>
-    <%= t.label "For user:" %>
-    <%= collection_select(:profile, :user_id, User.all, :id, :nick) %>
-  </p>
+
   <p>
     <%= t.name.label %>
     <%= t.name.text_field %>
@@ -10,6 +7,10 @@
   <p>
     <%= t.surname.label %>
     <%= t.surname.text_field %>
+  </p>
+  <p>
+    <%= t.maried.label "maried ?"%>
+    <%= t.maried.check_box %>
   </p>
   <p>
     <%= t.password.label "your password"%>

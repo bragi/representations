@@ -39,16 +39,6 @@ module Representations
     def to_s
       @value ? ERB::Util::h(@value.to_s) : ''
     end
-    def link(link_title = "", passed_options = {})
-      if @value
-        a = "\"/#{@value.class.to_s.downcase.pluralize}/#{@value.id}/\""
-        a << passed_options[:view].to_s if passed_options[:view]
-        link_title.to_s.empty? ? b = "#{@value.class.to_s} #{@value.id}" : b = link_title.to_s
-        %Q(<a href=#{a}>#{b}</a>)
-      else
-        ""
-      end
-    end
     #build or modify @namespace for Representation object 
     def current_namespace(passed_namespace = nil)
       if passed_namespace
@@ -111,6 +101,7 @@ module Representations
       options = options.sort
       options.map{ |key, value| %(#{key}="#{value}" ) }
     end
+    #If the wrapped object is nil return self to avoid invoking methods on nil object (if any will occur)
     def method_missing(method_name)
       @value ? super : self
     end

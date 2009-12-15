@@ -31,10 +31,22 @@ module Representations
       @template.concat("</form>")
       self
     end
+    def link(link_title = "", passed_options = {})
+      if @value
+        a = %Q{"/#{@value.class.to_s.downcase.pluralize}/#{@value.id}}
+        html_options = ""
+        passed_options[:view] ? a << "/" << passed_options[:view].to_s << '"': a << '"'
+        passed_options.each_pair {|k, v| html_options << " #{k}" << "=" << "\"#{v}\"" unless k == :view}
+        link_title.to_s.empty? ? b = "#{@value.class.to_s} #{@value.id}" : b = link_title.to_s
+        %Q(<a href=#{a}#{html_options}>#{b}</a>)
+      else
+        ""
+      end
+    end
     #clone Representation object and set it's @namespace variable to required value
     def namespace(a)
       namespaced_representation = self.clone
-      namespaced_representation.namespace = current_namespace(a)
+      namespaced_representation.current_namespace(a)
       namespaced_representation
     end
     #Forwards ActiveRecord invocation and wraps result in appropriate Representation

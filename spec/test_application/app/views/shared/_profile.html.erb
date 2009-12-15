@@ -1,8 +1,5 @@
 <% @profile.form do |t| %>
-  <p>
-    <%= t.label "For user:" %>
-    <%= collection_select(:profile, :user_id, User.all, :id, :nick) %>
-  </p>
+
   <p>
     <%= t.name.label %>
     <%= t.name.text_field %>
@@ -10,6 +7,22 @@
   <p>
     <%= t.surname.label %>
     <%= t.surname.text_field %>
+  </p>
+  <p>
+    <%= t.maried.label "maried ?"%>
+    <%= t.maried.check_box %>
+  </p>
+  <p>
+    <%= t.password.label "your password"%>
+    <%= t.password.password_field %>
+  </p>
+  <p>
+    <%= t.hidden_value.label "hidden value"%>
+    <%= t.hidden_value.hidden_field %>
+  </p>
+  <p>
+    <%= t.picture.label "upload your photo"%>
+    <%= t.picture.file_field %>
   </p>
   <p>
     <%= t.eye_color.radio_button_label('blue') %>

@@ -2,6 +2,10 @@
 <%= @user.nick.label %>
 <%= @user.nick %>
 </p>
+<p>
+<%= @user.link("link title") %>
+<%= @user.link("edycja", :view => 'edit') %>
+</p>
 <% @user.profile do |profile| %>
   <p>
   <%= profile.name.label %>
@@ -48,7 +52,7 @@
 <%= @user.partial('test_partial', '/good/bad/ugly') %>
 </p>
 <p>
-<%= link_to "edit", edit_user_path(@user) %>
+<%= @user.link("edit", :view => 'edit') %>
 </p>
 <p>
 <%= link_to 'users', users_path %>

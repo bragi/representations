@@ -15,6 +15,8 @@ module NavigationHelpers
       new_user_path
     when /the users page/
       users_path
+    when /the new profile page/
+      new_profile_path
     
     # Add more mappings here.
     # Here is a more fancy example:

@@ -9,4 +9,5 @@ spec/test_application/log/*.log
 coverage
 rdoc
 pkg
+*~
 /*.gem

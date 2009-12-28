@@ -1,4 +1,10 @@
 *.sw?
+Doxyfile
+representations.kdevelop
+representations.kdevelop.filelist
+representations.kdevses
+spec/test_application/rerun.txt
+spec/test_application/log/*.log
 .DS_Store
 coverage
 rdoc

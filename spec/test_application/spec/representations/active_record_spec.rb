@@ -27,7 +27,7 @@ describe Representations::ActiveRecordRepresentation do
     end
 
     it "should honor provided action" do
-      @template.should_receive(:polymorphic_path).with(@user_model, {:anchor => nil, :action => :edit}).and_return("/")
+      @template.should_receive(:polymorphic_path).with([@user_model], {:anchor => nil, :action => :edit}).and_return("/")
       @user.link("title", :action => :edit)
     end
 
@@ -39,6 +39,11 @@ describe Representations::ActiveRecordRepresentation do
     it "should use HTML options" do
       @template.should_receive(:link_to).with("test", "/default_path", {:class => "AA", :style => "BB"})
       @user.link("test", :class => "AA", :style => "BB")
+    end
+    
+    it "should honor used namespace" do
+      @template.should_receive(:polymorphic_path).with([:good, :bad, :ugly, @user_model], {:anchor => nil, :action => nil}).and_return("/")
+      @user.namespace("good/bad/ugly").link
     end
   end
 

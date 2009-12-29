@@ -31,18 +31,28 @@ module Representations
       @template.concat("</form>")
       self
     end
-    def link(link_title = "", passed_options = {})
-      if @value
-        a = %Q{"/#{@value.class.to_s.downcase.pluralize}/#{@value.id}}
-        html_options = ""
-        passed_options[:view] ? a << "/" << passed_options[:view].to_s << '"': a << '"'
-        passed_options.each_pair {|k, v| html_options << " #{k}" << "=" << "\"#{v}\"" unless k == :view}
-        link_title.to_s.empty? ? b = "#{@value.class.to_s} #{@value.id}" : b = link_title.to_s
-        %Q(<a href=#{a}#{html_options}>#{b}</a>)
-      else
-        ""
-      end
+    
+    # Creates link to representation. When you do not provide +link_title+
+    # sane value (class of represented object) will be used.
+    #
+    # ==== Arguments
+    #
+    # * <tt>link_title/tt> - Title of the link
+    # * <tt>options</tt> - HTML options for the link plus two options:
+    #    * <tt>:action</tt> - target action of the link, for example
+    #      <tt>:new</tt> or <tt>:edit/tt>
+    #    * <tt>:anchor</tt> - target anchor of the link
+    def link(link_title = nil, options = {})
+      # Sane link_title value
+      link_title = @value.class.to_s.demodulize.tableize.singularize.humanize unless link_title
+      
+      # Extract URL options
+      action = options.delete(:action)
+      anchor = options.delete(:anchor)
+      namespaced_value = @namespace + [@value]
+      @template.link_to(link_title, @template.polymorphic_path(namespaced_value, :action => action, :anchor => anchor), options)
     end
+    
     #clone Representation object and set it's @namespace variable to required value
     def namespace(a)
       namespaced_representation = self.clone

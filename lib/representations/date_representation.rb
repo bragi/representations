@@ -9,6 +9,10 @@ module Representations
       options.merge!(passed_options)
       @template.date_select(names, @name, options, html_options)
     end
+    def _html_field_name
+      return @name unless @parent
+      "#{@parent._html_field_name}[#{@name}]"
+    end
   end
   #Something like aliases
   class TimeWithZoneRepresentation < DateRepresentation

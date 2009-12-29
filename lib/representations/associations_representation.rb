@@ -24,7 +24,12 @@ module Representations
     def build
       new_object = @value.build 
       representation_object = AssociationsRepresentation::NewRecordRepresentation.new(new_object, @template, 'new_' + num.to_s, self)
-      yield representation_object
+      yield representation_object if block_given?
+      representation_object
+    end
+    def _html_field_name
+      return @name unless @parent
+      "#{@parent._html_field_name}[#{@name}_attributes]"
     end
     private 
     attr_reader :num
@@ -56,6 +61,11 @@ module Representations
         ::Representations::AssociationsRepresentation::NewRecordRepresentation.class_eval(method, __FILE__, __LINE__)
         self.__send__(method_name_symbol, &block)
       end
+      def _html_field_name
+        return @name unless @parent
+        "#{@parent._html_field_name}[#{@name}]"
+      end
+
     end
   end
 end

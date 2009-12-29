@@ -88,9 +88,9 @@ module Representations
       prev = nil
       tree.each do |elem| 
         if elem[1] == DefaultRepresentation || elem[1] == TimeWithZoneRepresentation || prev == AssociationsRepresentation
-          name.push "[" + elem[0] + "]"
+          name.push "[#{elem[0]}]"
         else
-          name.push "[" + elem[0] + "_attributes]"
+          name.push "[#{elem[0]}_attributes]"
         end
         prev = elem[1]
       end
@@ -101,11 +101,16 @@ module Representations
       options = base_options.merge(user_options)
       options.stringify_keys!
       options = options.sort
-      options.map{ |key, value| %(#{key}="#{value}" ) }
+      options.map{ |key, value| %(#{key}="#{value}") }.join(" ")
     end
     #If the wrapped object is nil return self to avoid invoking methods on nil object (if any will occur)
-    def method_missing(method_name)
-      @value ? super : self
+    def method_missing(method_name, *arguments)
+      @value ? super : Representation.new(nil, @template, method_name, self)
+    end
+
+    def _html_field_name
+      return @name unless @parent
+      "#{@parent._html_field_name}[#{@name}_attributes]"
     end
   end
 end

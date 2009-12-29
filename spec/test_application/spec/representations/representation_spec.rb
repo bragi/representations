@@ -17,4 +17,16 @@ describe Representations::Representation do
     user = Representations::representation_for(user, nil, "user" )
     user.should satisfy { user.respond_to?(:test_met) }
   end
+
+  it "should bulid valid html attribute name" do
+    user = stub_model(User)
+    user = Representations::representation_for(user, nil, "user" )
+    user.nick._html_field_name.should == "user[nick]"
+  end
+  
+  it "should bulid valid html attribute name for nested model" do
+    user = stub_model(User)
+    user = Representations::representation_for(user, nil, "user" )
+    user.tasks.build.title._html_field_name.should == "user[tasks_attributes][new_0][title]"
+  end
 end

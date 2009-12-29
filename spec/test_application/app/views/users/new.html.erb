@@ -54,7 +54,7 @@
   <% end %>
 <% end %>
 
-<% r(@user).namespace(:admin).form do |namespace| %>
+<% r(@user).namespace("good/bad/ugly").form do |namespace| %>
   <%= namespace.label "namespace test" %>
 <% end %>
 

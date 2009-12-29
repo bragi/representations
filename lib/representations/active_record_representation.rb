@@ -18,13 +18,7 @@ module Representations
       raise "You need to provide block to form representation" unless block_given?
       content = @template.capture(self, &block)
       @value.new_record? ? options = {:method => :post} : options = {:method => :put}
-      if path
-        path = path
-      elsif @namespace      
-        path = @namespace.to_s
-      else
-        path = @template.polymorphic_path(@value)
-      end
+      path = @template.polymorphic_path(_namespaced_value) unless path
       @template.concat(@template.form_tag(path, options))
       @template.concat(content)
       @template.concat(@template.submit_tag("ok"))
@@ -49,8 +43,7 @@ module Representations
       # Extract URL options
       action = options.delete(:action)
       anchor = options.delete(:anchor)
-      namespaced_value = @namespace + [@value]
-      @template.link_to(link_title, @template.polymorphic_path(namespaced_value, :action => action, :anchor => anchor), options)
+      @template.link_to(link_title, @template.polymorphic_path(_namespaced_value, :action => action, :anchor => anchor), options)
     end
     
     #clone Representation object and set it's @namespace variable to required value
@@ -76,5 +69,10 @@ module Representations
       ::Representations::ActiveRecordRepresentation.class_eval(method, __FILE__, __LINE__)
       self.__send__(method_name, &block)
     end
+    
+    private
+      def _namespaced_value
+        @namespace + [@value]
+      end
   end
 end

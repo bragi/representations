@@ -1,7 +1,13 @@
 ActionController::Routing::Routes.draw do |map|
   map.root :controller => 'users', :action => 'index'
   map.resources :users
-  map.resources :users, :path_prefix => '/good/bad/ugly'
+  map.namespace :good do |good|
+    good.namespace :bad do |bad|
+      bad.namespace :ugly do |ugly|
+        ugly.resources :users
+      end
+    end
+  end
   map.resources :profiles
   map.resources :tasks
 end

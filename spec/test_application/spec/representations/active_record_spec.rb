@@ -16,24 +16,29 @@ describe Representations::ActiveRecordRepresentation do
 
   describe :link do
     before do
-      user = stub_model(User, :id => 1)
-      @user = Representations::representation_for(user, nil, "user" )
+      @user_model = stub_model(User, :id => 1)
+      @template = stub("Template", :link_to => nil, :polymorphic_path => "/default_path")
+      @user = Representations::representation_for(@user_model, @template, "user" )
     end
 
-    it "with passed title should create link to show page" do
-      @user.link("title").should == '<a href="/users/1">title</a>'
+    it "uses provided link title" do
+      @template.should_receive(:link_to).with("title", "/default_path", {})
+      @user.link("title")
     end
 
-    it "with passed title and :view => :edit should creat link to edit page" do
-      @user.link("title", :view => :edit).should == '<a href="/users/1/edit">title</a>'
+    it "should honor provided action" do
+      @template.should_receive(:polymorphic_path).with(@user_model, {:anchor => nil, :action => :edit}).and_return("/")
+      @user.link("title", :action => :edit)
     end
 
-    it "without passed title should return proper html a tag with wrapped object's class name and id as a title" do
-      @user.link().should == '<a href="/users/1">User 1</a>'
+    it "should have default link title" do
+      @template.should_receive(:link_to).with("User", "/default_path", {})
+      @user.link
     end
 
-    it "should pass pairs from hash (other then key == :view) into html options" do
-      @user.link("test", :view => 'edit', :class => "AA", :style => "BB").should == '<a href="/users/1/edit" class="AA" style="BB">test</a>'
+    it "should use HTML options" do
+      @template.should_receive(:link_to).with("test", "/default_path", {:class => "AA", :style => "BB"})
+      @user.link("test", :class => "AA", :style => "BB")
     end
   end
 

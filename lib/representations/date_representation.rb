@@ -8,7 +8,7 @@ module Representations
       names.pop
       options = { :object => @parent.instance_variable_get(:@value) }
       options.merge!(passed_options)
-      @template.date_select(names, @name, options, html_options)
+      @template.date_select(names.join, @name, options, html_options)
     end
     
     def _nested_html_field_name

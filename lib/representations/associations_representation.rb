@@ -27,16 +27,14 @@ module Representations
       yield representation_object if block_given?
       representation_object
     end
-    def _html_field_name
-      return @name unless @parent
-      "#{@parent._html_field_name}[#{@name}_attributes]"
-    end
+
     private 
-    attr_reader :num
-    #Used for generating unique @name for ArrayRepresentation::NewRecordRepresentation
-    def num
-      @num += 1 
-    end
+
+      attr_reader :num
+      #Used for generating unique @name for ArrayRepresentation::NewRecordRepresentation
+      def num
+        @num += 1 
+      end
     #Representation that wraps newly created ActiveRecord::Base that will be added to some collection
     class NewRecordRepresentation < Representation
       #Creates new method which wraps call for ActionRecord
@@ -61,11 +59,10 @@ module Representations
         ::Representations::AssociationsRepresentation::NewRecordRepresentation.class_eval(method, __FILE__, __LINE__)
         self.__send__(method_name_symbol, &block)
       end
-      def _html_field_name
-        return @name unless @parent
-        "#{@parent._html_field_name}[#{@name}]"
-      end
 
+      def _nested_html_field_name
+        @name
+      end
     end
   end
 end

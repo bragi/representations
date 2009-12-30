@@ -69,9 +69,8 @@ module Representations
       %Q{<label #{tags}>#{ERB::Util::h(value)}</label>}
     end
     
-    def _html_field_name
-      return @name unless @parent
-      "#{@parent._html_field_name}[#{@name}]"
+    def _nested_html_field_name
+      @name
     end
   end
 end

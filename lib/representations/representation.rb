@@ -58,6 +58,12 @@ module Representations
       value = ERB::Util::h(@name.humanize) if value.nil?
       %Q{<label #{tags}>#{value}</label>}
     end
+
+    def _html_field_name
+      return @name unless @parent
+      "#{@parent._html_field_name}[#{_nested_html_field_name}]"
+    end
+    
     protected
     #Call the passed block (if any) 
     def with_block(&block)
@@ -108,9 +114,8 @@ module Representations
       @value ? super : Representation.new(nil, @template, method_name, self)
     end
 
-    def _html_field_name
-      return @name unless @parent
-      "#{@parent._html_field_name}[#{@name}_attributes]"
+    def _nested_html_field_name
+      "#{@name}_attributes"
     end
   end
 end

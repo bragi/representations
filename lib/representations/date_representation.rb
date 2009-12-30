@@ -1,5 +1,6 @@
 module Representations
-  #Representation for Date object 
+  
+  # Representation for Date object 
   class DateRepresentation < Representation
     def select(passed_options = {}, html_options = {})
       tree = get_parents_tree
@@ -9,9 +10,9 @@ module Representations
       options.merge!(passed_options)
       @template.date_select(names, @name, options, html_options)
     end
-    def _html_field_name
-      return @name unless @parent
-      "#{@parent._html_field_name}[#{@name}]"
+    
+    def _nested_html_field_name
+      @name
     end
   end
   #Something like aliases

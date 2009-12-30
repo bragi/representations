@@ -33,10 +33,12 @@ module Representations
       begin
         if object.is_a?(ActiveRecord::Base)
           ActiveRecordRepresentation
-        elsif parent && parent.instance_variable_get(:@value).class.reflections[name.to_sym] && parent.instance_variable_get(:@value).class.reflections[name.to_sym].macro == :has_one
-          parent.instance_variable_get(:@value).send(name+'=', parent.instance_variable_get(:@value).class.reflections[name.to_sym].klass.new) if parent.instance_variable_get(:@value).send(name).nil? #create new AR object
-          object = parent.instance_variable_get(:@value).send(name)
+        elsif parent && parent._value.class.reflections[name.to_sym] && parent._value.class.reflections[name.to_sym].macro == :has_one
+          parent._value.send("#{name}=", parent._value.class.reflections[name.to_sym].klass.new) if parent._value.send(name).nil? #create new AR object
+          object = parent._value.send(name)
           Representations::ActiveRecordRepresentation
+        elsif object.nil? && parent.is_a?(Representations::ActiveRecordRepresentation) && sql_type = sql_type_for_name(parent, name)
+          representation_for_sql_type(sql_type)
         else
           "Representations::#{object.class.to_s.demodulize}Representation".constantize 
         end
@@ -44,6 +46,19 @@ module Representations
         AssociationsRepresentation if object.ancestors.include?(ActiveRecord::Associations) rescue DefaultRepresentation
       end
     representation_class.new(object, template, name, parent)
+  end
+  
+  def sql_type_for_name(object, name)
+    object.instance_variable_get(:@value).class.columns.select {|column| column.name == name}.map(&:sql_type).first
+  end
+  
+  def representation_for_sql_type(sql_type)
+    case sql_type
+      when "datetime", "timestamp without time zone"
+        Representations::DateRepresentation
+      else
+        Representations::Representation
+    end
   end
 
   module_function :representation_for

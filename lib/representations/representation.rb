@@ -1,6 +1,5 @@
 module Representations
   class Representation
-    attr_accessor :namespace
     #value - object for which the representation is created 
     #template - template view (needed because some ActionView::Base methods are private)
     #name - the actuall name of the method that was called on the object's parent that is being initialize
@@ -29,17 +28,42 @@ module Representations
         send(:extend, "::#{value.class.to_s}Representation".constantize) 
       end
     end
+    
+    def _value
+      @value
+    end
+    
+    def _name
+      @name
+    end
+    
+    def _template
+      @template
+    end
+    
+    def _parent
+      @parent
+    end
+    
+    def _namespace
+      @namespace
+    end
+
+    # TODO: remove?
     def +(arg)
       to_s + arg.to_s
     end
+    
     def to_param
       @value.id.to_s if @value
     end
-    #returns escaped string from the object's to_s method
+    
+    # Returns escaped string from the object's to_s method
     def to_s
       @value ? ERB::Util::h(@value.to_s) : ''
     end
-    #build or modify @namespace for Representation object 
+
+    # Build or modify @namespace for Representation object 
     def current_namespace(namespace = nil)
       case namespace
       when Symbol
@@ -50,6 +74,7 @@ module Representations
         @namespace += namespace
       end
     end
+
     #returns html label tag for the representation
     def label(value = nil, html_options = {})
       tree = get_parents_tree
@@ -111,7 +136,7 @@ module Representations
     end
     #If the wrapped object is nil return self to avoid invoking methods on nil object (if any will occur)
     def method_missing(method_name, *arguments)
-      @value ? super : Representation.new(nil, @template, method_name, self)
+      @value ? super : Representations.representation_for(nil, @template, method_name, self)
     end
 
     def _nested_html_field_name

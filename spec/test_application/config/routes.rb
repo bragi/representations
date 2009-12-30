@@ -10,4 +10,5 @@ ActionController::Routing::Routes.draw do |map|
   end
   map.resources :profiles
   map.resources :tasks
+  map.connect ":controller/:action/:id"
 end

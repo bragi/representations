@@ -24,6 +24,9 @@ module NavigationHelpers
     when /^(.*)'s user page$/i
       user_profile_path(User.find_by_login($1))
 
+    # examples
+    when /example of (.*)$/
+      url_for(:controller => 'examples', :action => $1.gsub(/\s+/, "_"))
     else
       raise "Can't find mapping from \"#{page_name}\" to a path.\n" +
         "Now, go and add a mapping in #{__FILE__}"

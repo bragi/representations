@@ -80,5 +80,12 @@ module Representations
       def _namespaced_value
         @namespace + [@value]
       end
+      def _nested_html_field_name
+        if @parent && @parent.is_a?(Representations::AssociationsRepresentation)
+          @name
+        else
+          "#{@name}_attributes"
+        end
+      end
   end
 end

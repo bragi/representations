@@ -15,7 +15,7 @@ module Representations
         tree = representation_object.get_parents_tree
         name = get_html_name_attribute_value(tree)
         name << '[id]'
-        tags = get_tags({}, {:value => @value[idx].id.to_s, :name=>name})
+        tags = get_tags({}, {:value => @value[idx].id.to_s, :name => name.join})
         @template.concat("<input type='hidden' #{tags}/>")
         yield representation_object
       end

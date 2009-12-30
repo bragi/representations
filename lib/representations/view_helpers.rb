@@ -26,9 +26,7 @@ module Representations
     end
     private
     def find_variable_name(object)
-      self.instance_variables.each do |name|
-        return name[1..-1] if instance_variable_get(name) == object
-      end
+      object.class.to_s.underscore
     end
   end
 end

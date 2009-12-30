@@ -4,7 +4,7 @@
 </p>
 <p>
 <%= @user.link("link title") %>
-<%= @user.link("edycja", :view => 'edit') %>
+<%= @user.link("edit", :action => 'edit') %>
 </p>
 <% @user.profile do |profile| %>
   <p>

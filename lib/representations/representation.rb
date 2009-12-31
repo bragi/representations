@@ -89,6 +89,10 @@ module Representations
       "#{@parent._html_field_name}[#{_nested_html_field_name}]"
     end
     
+    def _is_has_one_relation(name)
+      false
+    end
+    
     protected
     #Call the passed block (if any) 
     def with_block(&block)
@@ -134,6 +138,7 @@ module Representations
       options = options.sort
       options.map{ |key, value| %(#{key}="#{value}") }.join(" ")
     end
+
     #If the wrapped object is nil return self to avoid invoking methods on nil object (if any will occur)
     def method_missing(method_name, *arguments)
       @value ? super : Representations.representation_for(nil, @template, method_name, self)

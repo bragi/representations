@@ -33,7 +33,7 @@ module Representations
       begin
         if object.is_a?(ActiveRecord::Base)
           ActiveRecordRepresentation
-        elsif parent && parent._value.class.reflections[name.to_sym] && parent._value.class.reflections[name.to_sym].macro == :has_one
+        elsif parent._is_has_one_relation(name)
           parent._value.send("#{name}=", parent._value.class.reflections[name.to_sym].klass.new) if parent._value.send(name).nil? #create new AR object
           object = parent._value.send(name)
           Representations::ActiveRecordRepresentation

@@ -75,6 +75,10 @@ module Representations
       self.__send__(method_name, &block)
     end
     
+    def _is_has_one_relation(name)
+      @value && @value.class.reflections[name.to_sym] && @value.class.reflections[name.to_sym].macro == :has_one
+    end
+
     private
     
       def _namespaced_value

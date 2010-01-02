@@ -11,9 +11,6 @@ module Representations
       @template = template
       @parent = parent
       @namespace = namespace
-
-      # __load_user_global_extensions
-      # __load_user_class_specific_extensions
     end
     
     # Defines double-underscored properties
@@ -30,27 +27,6 @@ module Representations
       class_eval(method, __FILE__, __LINE__)
     end
 
-    def __load_user_global_extensions
-      #extend class if user provided appropriate file (look at the files app/representations/*_representation.rb)
-      #first check if file exists in app/representations
-      file_name = "#{RAILS_ROOT}/app/representations/#{send(:class).to_s.demodulize.tableize.singularize}.rb"
-      if File.exist?(file_name)
-        ActiveSupport::Dependencies.require_or_load(file_name)
-        Rails.logger.info "Extending Representation ::#{self.class.to_s.demodulize}"
-        self.class.send(:include, "::#{self.class.to_s.demodulize}".constantize)
-      end
-    end
-    
-    def __load_user_class_specific_extensions
-      #extend this object's class if user provided per-model extensions (i.e. for Job model look at app/representations/job_representation.rb)
-      file_name = "#{RAILS_ROOT}/app/representations/#{value.class.to_s.demodulize.tableize.singularize}_representation.rb"
-      if File.exist?(file_name)
-        ActiveSupport::Dependencies.require_or_load(file_name)
-        Rails.logger.info "Extending Representation ::#{self.class.to_s.demodulize} for model #{value.class.to_s}"
-        send(:extend, "::#{value.class.to_s}Representation".constantize) 
-      end
-    end
-    
     def __representation_for(value, name)
       self.class.new(value, __template, name, self, __namespace)
     end

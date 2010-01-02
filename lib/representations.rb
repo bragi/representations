@@ -19,23 +19,24 @@ module Representations
   #Creates Representation for object passed as a paremeter, type of the representation
   #depends on the type of the object
   def representation_for(object, template, name, parent=nil)
-    representation_class =
-      begin
-        if object.is_a?(ActiveRecord::Base)
-          ActiveRecordRepresentation
-        elsif parent._is_has_one_relation(name)
-          parent._value.send("#{name}=", parent._value.class.reflections[name.to_sym].klass.new) if parent._value.send(name).nil? #create new AR object
-          object = parent._value.send(name)
-          Representations::ActiveRecordRepresentation
-        elsif object.nil? && parent.is_a?(Representations::ActiveRecordRepresentation) && sql_type = sql_type_for_name(parent, name)
-          representation_for_sql_type(sql_type)
-        else
-          "Representations::#{object.class.to_s.demodulize}Representation".constantize 
-        end
-      rescue 
-        AssociationsRepresentation if object.ancestors.include?(ActiveRecord::Associations) rescue DefaultRepresentation
-      end
-    representation_class.new(object, template, name, parent)
+    ClassSearch.new.class_for(object).new(object, template, name, parent)
+    # representation_class =
+    #   begin
+    #     if object.is_a?(ActiveRecord::Base)
+    #       ActiveRecordRepresentation
+    #     elsif parent._is_has_one_relation(name)
+    #       parent._value.send("#{name}=", parent._value.class.reflections[name.to_sym].klass.new) if parent._value.send(name).nil? #create new AR object
+    #       object = parent._value.send(name)
+    #       Representations::ActiveRecordRepresentation
+    #     elsif object.nil? && parent.is_a?(Representations::ActiveRecordRepresentation) && sql_type = sql_type_for_name(parent, name)
+    #       representation_for_sql_type(sql_type)
+    #     else
+    #       "Representations::#{object.class.to_s.demodulize}Representation".constantize 
+    #     end
+    #   rescue 
+    #     AssociationsRepresentation if object.ancestors.include?(ActiveRecord::Associations) rescue DefaultRepresentation
+    #   end
+    # representation_class.new(object, template, name, parent)
   end
   
   def sql_type_for_name(object, name)

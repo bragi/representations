@@ -1,4 +1,7 @@
 module Representations
+  class String < Base
+  end
+  
   class Default < Base
     #not tested in the view
     #Returns string with html check box tag

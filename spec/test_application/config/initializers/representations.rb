@@ -1,1 +1,1 @@
-Representations.enable_automatic_wrapping = true
+Representations.enable_automatic_wrapping!

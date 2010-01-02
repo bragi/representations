@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe Representations::ActiveRecordRepresentation do
+describe Representations::ActiveRecord do
   it "when a method with the same name as associated object is called with a block it should create html tags for representations passed inside a block" do
     profile = stub_model(Profile, {:name => "some name"})
     user = stub_model(User, {:profile => profile})

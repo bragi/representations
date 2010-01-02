@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe Representations::AssociationsRepresentation do
+describe Representations::Association do
     before do
         user = User.new
         @user = Representations::representation_for(user, nil, "user" )

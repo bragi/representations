@@ -1,5 +1,5 @@
 module Representations
-  class DefaultRepresentation < Representation
+  class Default < Base
     #not tested in the view
     #Returns string with html check box tag
     def check_box(checked_value = "1", unchecked_value = "0", html_options = {})

@@ -1,6 +1,6 @@
 module Representations
   #Representation for ActiveRecord::Base objects
-  class ActiveRecordRepresentation < Representation
+  class ActiveRecord < Base
     
     # Render partial with the given name and given namespace as a parameter
     def partial(partial_name, namespace = nil)

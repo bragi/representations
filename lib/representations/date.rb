@@ -1,7 +1,7 @@
 module Representations
   
   # Representation for Date object 
-  class DateRepresentation < Representation
+  class Date < Base
     def select(passed_options = {}, html_options = {})
       tree = get_parents_tree
       names = get_html_name_attribute_value(tree)
@@ -16,9 +16,9 @@ module Representations
     end
   end
   #Something like aliases
-  class TimeWithZoneRepresentation < DateRepresentation
+  class TimeWithZone < Date
   end
-  class DateTimeRepresentation < DateRepresentation
+  class DateTime < Date
   end
 end
 

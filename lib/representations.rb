@@ -1,31 +1,21 @@
-require "#{File.dirname(__FILE__)}/representations/representation"
-require "#{File.dirname(__FILE__)}/representations/default_representation"
-require "#{File.dirname(__FILE__)}/representations/associations_representation"
-require "#{File.dirname(__FILE__)}/representations/active_record_representation.rb"
-require "#{File.dirname(__FILE__)}/representations/date_representation"
-require "#{File.dirname(__FILE__)}/representations/view_helpers"
+require "#{File.dirname(__FILE__)}/representations/class_search"
+require "#{File.dirname(__FILE__)}/representations/base"
+require "#{File.dirname(__FILE__)}/representations/default"
+require "#{File.dirname(__FILE__)}/representations/association"
+require "#{File.dirname(__FILE__)}/representations/active_record.rb"
+require "#{File.dirname(__FILE__)}/representations/date"
+require "#{File.dirname(__FILE__)}/representations/extensions/action_view"
 
-ActionView::Base.send :include, Representations::ViewHelpers
+ActionView::Base.send :include, Representations::Extensions::ActionView
 
 module Representations
   
-  #Currently this method is never called but maybe someday it will have to be :-)
-  #Changes ActionController::PolymorphicRoutes#polymorphic_path so it can handle R
-  def self.eval_polymorphic_routes
-    ActionController::PolymorphicRoutes.class_eval do
-      def polymorphic_path_with_r(object, options = {})
-        object.is_a?(Representation) ? polymorphic_path_without_r(object.instance_variable_get(:@value), options) : polymorphic_path_without_r(object, options)
-      end
-      alias_method_chain :polymorphic_path, :r
-    end
+  # When enabled all controller instance variables will be wrapped when 
+  # transfered to view. 
+  def self.enable_automatic_wrapping!
+    ActionView::Base.class_eval{ self.alias_method_chain :instance_variable_set, :wrap_in_representation }
   end
-  #Enables automatic wrapping
-  #Currently there's no way of disabling it
-  def self.enable_automatic_wrapping=(value)
-    if value
-      ActionView::Base.class_eval{ self.alias_method_chain :instance_variable_set, :r }
-    end
-  end
+  
   #Creates Representation for object passed as a paremeter, type of the representation
   #depends on the type of the object
   def representation_for(object, template, name, parent=nil)

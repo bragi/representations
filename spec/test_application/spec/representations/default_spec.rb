@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe Representations::DefaultRepresentation do
+describe Representations::Default do
   it '::text_field should create html text input tag with rails naming convention' do
     profile = stub_model(Profile, {:name => "some name"})
     user = stub_model(User, {:profile => profile})

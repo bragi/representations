@@ -1,6 +1,6 @@
 module Representations
-  #Representation for Collections
-  class AssociationsRepresentation < Representation
+  # Represents a collection of objects
+  class Association < Base
     #initilize @num variable
     def initialize(object, template, name, parent)
       super
@@ -36,7 +36,7 @@ module Representations
         @num += 1 
       end
     #Representation that wraps newly created ActiveRecord::Base that will be added to some collection
-    class NewRecordRepresentation < Representation
+    class NewRecord < Base
       #Creates new method which wraps call for ActionRecord
       #New method returns Representation which represents datatype in the appropriate column
       def method_missing(method_name_symbol, *args, &block)

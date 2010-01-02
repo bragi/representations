@@ -63,22 +63,30 @@ module Representations
     #   ar_user.nick = 'foo'
     #   user = r(ar_user) #user is now ActiveRecordRepresentation
     #   user.nick.text_field #method_missing will be called on user with method_name = 'nick' in which new method for user will be created and will be called. The newly created method will create a new DefaultRepresentation with @value set to the string 'foo'. Next the text_field will be called on the newly created DefaultRepresentation
-    def method_missing(method_name, *args, &block)
-      method = <<-EOF
-            def #{method_name}(*args, &block)
-              @__#{method_name} ||= Representations.representation_for(@value.#{method_name}, @template, "#{method_name}", self)
-              @__#{method_name}.with_block(&block)
-              @__#{method_name} if block.nil? 
-            end
-      EOF
-      ::Representations::ActiveRecordRepresentation.class_eval(method, __FILE__, __LINE__)
-      self.__send__(method_name, &block)
+    # def method_missing(method_name, *args, &block)
+    #   method = <<-EOF
+    #         def #{method_name}(*args, &block)
+    #           @__#{method_name} ||= Representations.representation_for(@value.#{method_name}, @template, "#{method_name}", self)
+    #           @__#{method_name}.with_block(&block)
+    #           @__#{method_name} if block.nil? 
+    #         end
+    #   EOF
+    #   ::Representations::ActiveRecordRepresentation.class_eval(method, __FILE__, __LINE__)
+    #   self.__send__(method_name, &block)
+    # end
+    
+    def __value_class
+      @value.class
     end
     
-    def _is_has_one_relation(name)
-      @value && @value.class.reflections[name.to_sym] && @value.class.reflections[name.to_sym].macro == :has_one
+    def __representation_for(value, method)
+      super if value
+      method = method.to_sym
+      if __value_class.reflections[method] && __value_class.reflections[method].macro == :has_one
+        ClassSearch.new.class_for_class(__value_class)
+      end
     end
-
+    
     private
     
       def _namespaced_value

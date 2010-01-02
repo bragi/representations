@@ -8,7 +8,10 @@ module Representations
     #  * classRepresentation - for user-defined classes (AR derrived for example)
     #  * Representations::class - for standard classes
     def class_for(object)
-      object_class = object.class.to_s
+      class_for_class(object.class)
+    end
+    
+    def class_for_class(object_class)
       # Try to load user-defined representation
       representation_class = "#{object_class}Representation".constantize rescue nil
       # Try to use standard representation
@@ -16,7 +19,7 @@ module Representations
       # We need to create representation class for this object
       # ActiveRecord derrived classes use different base
       representation_class ||= begin
-        base = object.is_a?(::ActiveRecord::Base) ? ::Representations::ActiveRecord : ::Representations::Default
+        base = object_class.ancestors.include?(::ActiveRecord::Base) ? ::Representations::ActiveRecord : ::Representations::Default
         name = "::#{object_class}Representation"
         eval("class #{name} < #{base}; end; #{name}")
       end

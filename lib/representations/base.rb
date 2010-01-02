@@ -28,7 +28,7 @@ module Representations
     end
 
     def __representation_for(value, name)
-      self.class.new(value, __template, name, self, __namespace)
+      ClassSearch.new.class_for(value).new(value, __template, name, self, __namespace)
     end
 
     # Forward method to represented value, wrap returned value in 
@@ -37,7 +37,7 @@ module Representations
     def method_missing(method, *arguments)
       value = __value.send(method, *arguments)
       representation = __representation_for(value, method)
-      yield representation if blog_given?
+      yield representation if block_given?
       representation
     end
     

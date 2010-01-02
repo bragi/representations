@@ -9,9 +9,16 @@ describe Representations::ClassSearch do
   
   it "should create representation for user-defined class" do
     class Test2; end
-    self.class.const_defined?("Test2Representation").should be_false
+    Object.send(:remove_const, "Test2Representation") if self.class.const_defined?("Test2Representation")
     representation_class = Representations::ClassSearch.new.class_for(Test2.new)
     representation_class.to_s.should == "Test2Representation"
     representation_class.superclass.should == Representations::Default
+  end
+  
+  it "should create representation for ActiveRecord based class" do
+    Object.send(:remove_const, "UserRepresentation") if self.class.const_defined?("UserRepresentation")
+    representation_class = Representations::ClassSearch.new.class_for(User.new)
+    representation_class.to_s.should == "UserRepresentation"
+    representation_class.superclass.should == Representations::ActiveRecord
   end
 end

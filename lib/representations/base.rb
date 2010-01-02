@@ -5,16 +5,17 @@ module Representations
     # name - name of the object in representation chain
     # parent - previous object in representation chain
     # namespace - namespace in which object is presented
-    def initialize(value, template, name, parent=nil, namespace=[])
+    def initialize(value, template, name, parent=nil, options={})
       @value = value
       @name = name
       @template = template
       @parent = parent
-      @namespace = namespace
+      @namespace = options[:namespace] || []
+      @value_class = options[:value_class] || value.class
     end
     
     # Defines double-underscored properties
-    %w(value name template parent namespace).each do |property|
+    %w(value name template parent namespace value_class).each do |property|
       method = <<-EOT
         def __#{property}
           @#{property}
@@ -28,14 +29,14 @@ module Representations
     end
 
     def __representation_for(value, name)
-      ClassSearch.new.class_for(value).new(value, __template, name, self, __namespace)
+      ClassSearch.new.class_for(value).new(value, __template, name, self, {:namespace => __namespace})
     end
 
     # Forward method to represented value, wrap returned value in 
     # representation. Yield it to a block if it was given and return new 
     # represetation anyway.
     def method_missing(method, *arguments)
-      value = __value.send(method, *arguments)
+      value = __value.send(method, *arguments) if __value.respond_to?(method)
       representation = __representation_for(value, method)
       yield representation if block_given?
       representation

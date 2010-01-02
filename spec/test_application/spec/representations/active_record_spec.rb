@@ -9,11 +9,20 @@ describe Representations::ActiveRecord do
       representation.profile.should be_a(ProfileRepresentation)
       representation.profile.should be_a(Representations::ActiveRecord)
     end
+
     it "should use ActiveRecord representation for missing object when it's a relation" do
       user = User.new
       representation = Representations::ActiveRecord.new(user, nil, 'user')
       representation.profile.should be_a(ProfileRepresentation)
       representation.profile.should be_a(Representations::ActiveRecord)
+    end
+    
+    it "should use ActiveRecord representation for chained missing objects" do
+      user = User.new
+      representation = Representations::ActiveRecord.new(user, nil, 'user')
+      representation.profile.should be_a(ProfileRepresentation)
+      representation.profile.user.should be_a(UserRepresentation)
+      representation.profile.user.should be_a(Representations::ActiveRecord)
     end
   end
   

@@ -2,6 +2,20 @@ module Representations
   #Representation for ActiveRecord::Base objects
   class ActiveRecord < Base
     
+    # TODO: refactor super handling
+    def __representation_for(value, name)
+      super if value
+
+      # Handle empty has_one relations
+      reflection = __value_class.reflections[name.to_sym]
+      class_name = if reflection && (reflection.macro == :has_one || reflection.macro == :belongs_to)
+        ClassSearch.new.class_for_class(reflection.klass)
+      elsif
+        super
+      end
+      class_name.new(value, __template, name, self, {:namespace => __namespace, :value_class => reflection.klass})
+    end
+    
     # Render partial with the given name and given namespace as a parameter
     def partial(partial_name, namespace = nil)
       if namespace
@@ -74,18 +88,6 @@ module Representations
     #   ::Representations::ActiveRecordRepresentation.class_eval(method, __FILE__, __LINE__)
     #   self.__send__(method_name, &block)
     # end
-    
-    def __value_class
-      @value.class
-    end
-    
-    def __representation_for(value, method)
-      super if value
-      method = method.to_sym
-      if __value_class.reflections[method] && __value_class.reflections[method].macro == :has_one
-        ClassSearch.new.class_for_class(__value_class)
-      end
-    end
     
     private
     

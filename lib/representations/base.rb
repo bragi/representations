@@ -42,6 +42,11 @@ module Representations
       representation
     end
     
+    # Lists forwarded methods as supported
+    def respond_to?(method)
+      __value.respond_to?(method) || super
+    end
+    
     # TODO: remove?
     # def +(arg)
     #   to_s + arg.to_s

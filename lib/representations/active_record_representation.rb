@@ -14,7 +14,7 @@ module Representations
     # Render partial if it has 'has_one' association with the other model, 
     # otherwise do normal to_s
     def to_s
-      @parent && @parent.instance_variable_get(:@value).class.reflections[:"#{@name}"].macro == :has_one ? partial(@name) : super
+      @parent && @parent._is_has_one_relation(@name) ? partial(@name) : super
     end
     
     # Form tag, namespace depends on the namespace of the controller.
